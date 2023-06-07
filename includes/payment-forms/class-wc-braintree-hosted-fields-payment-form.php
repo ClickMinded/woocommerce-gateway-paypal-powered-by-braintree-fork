@@ -188,21 +188,28 @@ class WC_Braintree_Hosted_Fields_Payment_Form extends WC_Braintree_Payment_Form 
 	 */
 	protected function get_enabled_card_types() {
 
-		$types = array_map( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_10_15\\SV_WC_Payment_Gateway_Helper::normalize_card_type', $this->get_gateway()->get_card_types() );
+    $card_types = $this->get_gateway()->get_card_types();
 
-		// The Braintree SDK has its own strings for a few card types that we need to match
-		$types = str_replace( [
-			Framework\SV_WC_Payment_Gateway_Helper::CARD_TYPE_AMEX,
-			Framework\SV_WC_Payment_Gateway_Helper::CARD_TYPE_DINERSCLUB,
-			Framework\SV_WC_Payment_Gateway_Helper::CARD_TYPE_MASTERCARD,
-		], [
-			'american-express',
-			'diners-club',
-			'master-card',
-		], $types );
+    // if the card types is a string, convert it into an array
+    if (is_string($card_types)) {
+        $card_types = [$card_types];
+    }
+    
+    $types = array_map('\\SkyVerge\\WooCommerce\\PluginFramework\\v5_10_15\\SV_WC_Payment_Gateway_Helper::normalize_card_type', $card_types);
 
-		return $types;
-	}
+    // The Braintree SDK has its own strings for a few card types that we need to match
+    $types = str_replace([
+        Framework\SV_WC_Payment_Gateway_Helper::CARD_TYPE_AMEX,
+        Framework\SV_WC_Payment_Gateway_Helper::CARD_TYPE_DINERSCLUB,
+        Framework\SV_WC_Payment_Gateway_Helper::CARD_TYPE_MASTERCARD,
+    ], [
+        'american-express',
+        'diners-club',
+        'master-card',
+    ], $types);
+
+    return $types;
+}
 
 
 	/**
