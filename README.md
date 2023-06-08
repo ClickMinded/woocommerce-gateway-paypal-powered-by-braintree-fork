@@ -107,6 +107,11 @@ If not, please get in touch with us through the [plugin forums](https://wordpres
 
 == Changelog ==
 
+= 3.0.2.1 - 2023-06-08 =
+Forked version by ClickMinded
+* Fix - Don't recreate instance when billing address is updated or "update_checkout" event is triggered via AJAX. It will only be recreated if the iframe is removed from the DOM.
+* Fix - Warning about sending a string instead of array in the function get_enabled_card_types() located in includes\payment-forms\class-wc-braintree-hosted-fields-payment-form.php
+
 = 3.0.2 - 2023-05-24 =
 * Add – Support for Cart and Checkout blocks.
 * Dev – Bump WooCommerce minimum supported version from 6.0 to 6.8.  
