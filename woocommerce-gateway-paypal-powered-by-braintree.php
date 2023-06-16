@@ -3,10 +3,10 @@
  * Plugin Name: Braintree for WooCommerce Payment Gateway
  * Plugin URI: https://docs.woocommerce.com/document/woocommerce-gateway-paypal-powered-by-braintree/
  * Documentation URI: https://docs.woocommerce.com/document/woocommerce-gateway-paypal-powered-by-braintree/
- * Description: Receive credit card or PayPal payments using Braintree for WooCommerce.  A server with cURL, SSL support, and a valid SSL certificate is required (for security reasons) for this gateway to function. Requires PHP 7.3+
+ * Description: <code><strong>[Forked version by ClickMinded - resolved issue about payment fields being cleared]</strong></code> Receive credit card or PayPal payments using Braintree for WooCommerce.  A server with cURL, SSL support, and a valid SSL certificate is required (for security reasons) for this gateway to function. Requires PHP 7.3+
  * Author: WooCommerce
  * Author URI: http://woocommerce.com/
- * Version: 3.0.2
+ * Version: 3.0.2.1
  * Text Domain: woocommerce-gateway-paypal-powered-by-braintree
  * Domain Path: /i18n/languages/
  *
@@ -558,5 +558,11 @@ class WC_PayPal_Braintree_Loader {
 		}
 	}
 }
+
+add_filter('site_transient_update_plugins', 'remove_update_notification');
+function remove_update_notification($value) {
+     unset($value->response[ plugin_basename(__FILE__) ]);
+     return $value;
+} 
 
 WC_PayPal_Braintree_Loader::instance();
