@@ -64,8 +64,12 @@ class WC_Braintree_Hosted_Fields_Payment_Form extends WC_Braintree_Payment_Form 
 
 		if ( ! Framework\SV_WC_Helper::str_exists( $html, 'data-nonce' ) && in_array( Framework\SV_WC_Payment_Gateway_Helper::normalize_card_type( $token->get_card_type() ), $this->get_gateway()->get_3d_secure_card_types(), true ) ) {
 
-			if ( $nonce = $this->get_gateway()->get_3d_secure_nonce_for_token( $token ) ) {
-				$html = str_replace( 'name="wc-braintree-credit-card-payment-token"', 'name="wc-braintree-credit-card-payment-token" data-nonce="' . esc_attr( $nonce ) . '"', $html );
+			$nonce_data = $this->get_gateway()->get_3d_secure_data_for_token( $token );
+			$nonce      = $nonce_data['nonce'] ?? '';
+			$bin        = $nonce_data['bin'] ?? '';
+
+			if ( $nonce ) {
+				$html = str_replace( 'name="wc-braintree-credit-card-payment-token"', 'name="wc-braintree-credit-card-payment-token" data-nonce="' . esc_attr( $nonce ) . '" data-bin="' . esc_attr( $bin ) . '"', $html );
 			}
 		}
 
@@ -148,7 +152,7 @@ class WC_Braintree_Hosted_Fields_Payment_Form extends WC_Braintree_Payment_Form 
 				'enabled'                         => $this->should_enable_3d_secure(), // setting this to false overrides any account configuration
 				'liability_shift_always_required' => $this->get_gateway()->is_3d_secure_liability_shift_always_required(),
 				'card_types'                      => $card_types,
-				'failure_message'                 => __( 'We cannot process your order with the payment information that you provided. Please use an alternate payment method.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'failure_message'                 => esc_html__( 'We cannot process your order with the payment information that you provided. Please use an alternate payment method.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			),
 			'hosted_fields_styles' => $this->get_hosted_fields_styles(),
 			'enabled_card_types'   => $this->get_enabled_card_types(),
@@ -188,28 +192,29 @@ class WC_Braintree_Hosted_Fields_Payment_Form extends WC_Braintree_Payment_Form 
 	 */
 	protected function get_enabled_card_types() {
 
-    $card_types = $this->get_gateway()->get_card_types();
+		// Get the card types from the gateway.
+		$card_types = $this->get_gateway()->get_card_types();
 
     // if the card types is a string, convert it into an array
     if (is_string($card_types)) {
         $card_types = [$card_types];
     }
-    
-    $types = array_map('\\SkyVerge\\WooCommerce\\PluginFramework\\v5_10_15\\SV_WC_Payment_Gateway_Helper::normalize_card_type', $card_types);
+		//Map the card types to the Braintree SDK format.
+		$types = array_map( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_10_15\\SV_WC_Payment_Gateway_Helper::normalize_card_type', $card_types );
 
-    // The Braintree SDK has its own strings for a few card types that we need to match
-    $types = str_replace([
-        Framework\SV_WC_Payment_Gateway_Helper::CARD_TYPE_AMEX,
-        Framework\SV_WC_Payment_Gateway_Helper::CARD_TYPE_DINERSCLUB,
-        Framework\SV_WC_Payment_Gateway_Helper::CARD_TYPE_MASTERCARD,
-    ], [
-        'american-express',
-        'diners-club',
-        'master-card',
-    ], $types);
+		// The Braintree SDK has its own strings for a few card types that we need to match
+		$types = str_replace( [
+			Framework\SV_WC_Payment_Gateway_Helper::CARD_TYPE_AMEX,
+			Framework\SV_WC_Payment_Gateway_Helper::CARD_TYPE_DINERSCLUB,
+			Framework\SV_WC_Payment_Gateway_Helper::CARD_TYPE_MASTERCARD,
+		], [
+			'american-express',
+			'diners-club',
+			'master-card',
+		], $types );
 
-    return $types;
-}
+		return $types;
+	}
 
 
 	/**

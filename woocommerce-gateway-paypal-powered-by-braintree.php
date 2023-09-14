@@ -6,15 +6,15 @@
  * Description: <code><strong>[Forked version by ClickMinded - resolved issue about payment fields being cleared]</strong></code> Receive credit card or PayPal payments using Braintree for WooCommerce.  A server with cURL, SSL support, and a valid SSL certificate is required (for security reasons) for this gateway to function. Requires PHP 7.3+
  * Author: WooCommerce
  * Author URI: http://woocommerce.com/
- * Version: 3.0.2.2
+ * Version: 3.0.5.1
  * Text Domain: woocommerce-gateway-paypal-powered-by-braintree
  * Domain Path: /i18n/languages/
  *
- * Requires at least: 5.8
+ * Requires at least: 6.1
  * Tested up to: 6.2
  * Requires PHP: 7.3
- * WC requires at least: 6.8
- * WC tested up to: 7.6
+ * WC requires at least: 7.2
+ * WC tested up to: 7.8
  *
  * Copyright (c) 2016-2020, Automattic, Inc.
  *
@@ -274,7 +274,7 @@ class WC_PayPal_Braintree_Loader {
 
 		// check the PHP version
 		if ( version_compare( PHP_VERSION, self::MINIMUM_PHP_VERSION, '<' ) ) {
-
+			/** translators: Placeholders: %1$s - brantree version, %2$s - phpversion() */
 			$message = sprintf( __( 'The minimum PHP version required for this plugin is %1$s. You are running %2$s.', 'woocommerce-gateway-paypal-powered-by-braintree' ), WC_PAYPAL_BRAINTREE_MIN_PHP_VER, phpversion() );
 
 			$prefix = ( $during_activation ) ? 'The plugin could not be activated. ' : 'Braintree for WooCommerce has been deactivated. ';
@@ -518,7 +518,12 @@ class WC_PayPal_Braintree_Loader {
 			if ( $has_token ) {
 				?>
 				<div class='notice notice-error'>
-					<p><?php echo wp_kses( __( "<strong>Warning:</strong> Deleting a user will also delete the user's payment method saved on Braintree account.", 'woocommerce-gateway-paypal-powered-by-braintree' ), array( 'strong' => array() ) ); ?></p>
+					<p><?php echo sprintf(
+					/** translators: Placeholders: %1$s - <strong> tag, %2$s - </strong> tag */
+					__( '%1$sWarning:%2$s Deleting a user will also delete the user\'s payment method saved on Braintree account.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					'<strong>',
+					'</strong>'
+				); ?></p>
 				</div>
 				<?php
 			}

@@ -1,11 +1,28 @@
 *** Changelog ***
 
+= 3.0.5 - 2023-08-29 =
+* Fix - Link to merchant account IDs documentation within the settings pages.
+
+= 3.0.4 - 2023-07-25 =
+* Fix - Check whether wc_get_notices function exists before using it.
+* Dev - Add Playwright end-to-end tests.
+* Dev - Bump Braintree SDK from 3.73.1 to 3.94.0.
+
+= 3.0.3 - 2023-07-05 =
+* Dev - Bump WooCommerce "tested up to" version 7.8.
+* Dev - Bump WooCommerce minimum supported version from 6.8 to 7.2.
+* Dev - Bump WordPress minimum supported version from 5.8 to 6.1.
+* Dev - Ensure translations are properly defined.
+* Dev - Remove deprecated class aliases for framework classes renamed in 2.4.0.
+* Dev - Resolve coding standards issues.
+* Fix - Admin can now save multiple merchant Account IDs.
+
 = 3.0.2 - 2023-05-24 =
 * Add – Support for Cart and Checkout blocks.
-* Dev – Bump WooCommerce minimum supported version from 6.0 to 6.8.  
+* Dev – Bump WooCommerce minimum supported version from 6.0 to 6.8.
 * Dev – Bump WooCommerce “tested up to” version 7.4.
-* Dev – Bump WooCommerce “tested up to” version 7.6.  
-* Dev – Bump WordPress minimum supported version from 5.6 to 5.8.  
+* Dev – Bump WooCommerce “tested up to” version 7.6.
+* Dev – Bump WordPress minimum supported version from 5.6 to 5.8.
 * Dev – Bump WordPress “tested up to” version 6.2.
 
 = 3.0.1 - 2023-04-04 =

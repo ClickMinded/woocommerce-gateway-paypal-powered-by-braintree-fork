@@ -49,6 +49,21 @@ class WC_Braintree_API_Payment_Method_Nonce_Response extends WC_Braintree_API_Re
 		return ! empty( $payment_method ) ? $payment_method->nonce : null;
 	}
 
+	/**
+	 * Get the BIN information.
+	 *
+	 * @link https://developers.braintreepayments.com/reference/response/payment-method-nonce/php
+	 *
+	 * @since x.x.x
+	 * @return mixed
+	 */
+	public function get_bin() {
+
+		$payment_method = $this->get_payment_method();
+
+		$card_details = ! empty( $payment_method ) ? $payment_method->details : null;
+		return ! empty( $card_details ) ? $card_details['bin'] : null;
+	}
 
 	/**
 	 * Returns true if the payment method has 3D Secure information present

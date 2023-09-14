@@ -35,10 +35,10 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 
 
 	/** plugin version number */
-	const VERSION = '3.0.5.1'; // WRCS: DEFINED_VERSION.
+	const VERSION = '3.0.2.2';
 
 	/** Braintree JS SDK version  */
-	const BRAINTREE_JS_SDK_VERSION = '3.94.0';
+	const BRAINTREE_JS_SDK_VERSION = '3.73.1';
 
 	/** @var WC_Braintree single instance of this plugin */
 	protected static $instance;
@@ -57,6 +57,10 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 
 	/** PayPal gateway ID */
 	const PAYPAL_GATEWAY_ID = 'braintree_paypal';
+
+	/** @var \WC_Braintree_Frontend the frontend instance */
+	protected $frontend;
+
 
 	/**
 	 * Initializes the plugin
@@ -101,6 +105,12 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 	 * @since 2.0
 	 */
 	public function includes() {
+
+		// frontend instance
+		if ( ! is_admin() && ! wp_doing_ajax() ) {
+			$this->frontend = $this->load_class( '/includes/class-wc-braintree-frontend.php', 'WC_Braintree_Frontend' );
+		}
+
 		// gateways
 		require_once( $this->get_plugin_path() . '/includes/class-wc-gateway-braintree.php' );
 		require_once( $this->get_plugin_path() . '/includes/class-wc-gateway-braintree-credit-card.php' );
@@ -190,10 +200,10 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 		if ( $connected ) {
 
 			if ( $connected ) {
-				$message = esc_html__( 'Connected successfully.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+				$message = __( 'Connected successfully.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 				$class   = 'updated';
 			} else {
-				$message = esc_html__( 'There was an error connecting your Braintree account. Please try again.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+				$message = __( 'There was an error connecting your Braintree account. Please try again.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 				$class   = 'error';
 			}
 
@@ -384,10 +394,8 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 		if ( $credit_card_gateway->is_advanced_fraud_tool_enabled() && ! $this->get_admin_notice_handler()->is_notice_dismissed( 'fraud-tool-notice' ) ) {
 
 			$this->get_admin_notice_handler()->add_admin_notice(
-				sprintf(
-					/** translators: Placeholders: %1$s - <a> tag, %2$s - </a> tag */
-						esc_html__( 'Heads up! You\'ve enabled advanced fraud tools for Braintree. Please make sure that advanced fraud tools are also enabled in your Braintree account. Need help? See the %1$sdocumentation%2$s.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-					'<a target="_blank" href="' . esc_url( $this->get_documentation_url() ) . '">',
+				sprintf( __( 'Heads up! You\'ve enabled advanced fraud tools for Braintree. Please make sure that advanced fraud tools are also enabled in your Braintree account. Need help? See the %1$sdocumentation%2$s.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					'<a target="_blank" href="' . $this->get_documentation_url() . '">',
 					'</a>'
 				), 'fraud-tool-notice', array( 'always_show_on_settings' => false, 'dismissible' => true, 'notice_class' => 'updated' )
 			);
@@ -429,7 +437,7 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 
 				if ( ! wc_checkout_is_https() && ! $this->get_admin_notice_handler()->is_notice_dismissed( 'ssl-recommended-notice' ) ) {
 
-					$this->get_admin_notice_handler()->add_admin_notice( esc_html__( 'WooCommerce is not being forced over SSL -- Using PayPal with Braintree requires that checkout to be forced over SSL.', 'woocommerce-gateway-paypal-powered-by-braintree' ), 'ssl-recommended-notice' );
+					$this->get_admin_notice_handler()->add_admin_notice( __( 'WooCommerce is not being forced over SSL -- Using PayPal with Braintree requires that checkout to be forced over SSL.', 'woocommerce-gateway-paypal-powered-by-braintree' ), 'ssl-recommended-notice' );
 				}
 			}
 		}
@@ -464,7 +472,7 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 
 						$this->get_admin_notice_handler()->add_admin_notice(
 							/* translators: Placeholders: %1$s - payment gateway name tag, %2$s - <a> tag, %3$s - </a> tag */
-							sprintf( esc_html__( '%1$s: Heads up! Your %2$s dynamic descriptor is invalid and will not be used. Need help? See the %3$sdocumentation%4$s.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+							sprintf( __( '%1$s: Heads up! Your %2$s dynamic descriptor is invalid and will not be used. Need help? See the %3$sdocumentation%4$s.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 								'<strong>' . esc_html( $gateway->get_method_title() ) . '</strong>',
 								'<strong>' . esc_html( $type ) . '</strong>',
 								'<a target="_blank" href="https://docs.woocommerce.com/document/woocommerce-gateway-paypal-powered-by-braintree/#section-21">',
@@ -497,6 +505,17 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 		return self::$instance;
 	}
 
+
+	/**
+	 * Gets the frontend class instance.
+	 *
+	 * @since 2.0.0
+	 * @return \WC_Braintree_Frontend
+	 */
+	public function get_frontend_instance() {
+		return $this->frontend;
+	}
+
 	/**
 	 * Overrides the default SV framework implementation of payment methods in My Account.
 	 *
@@ -515,7 +534,7 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 	 * @return string the plugin name
 	 */
 	public function get_plugin_name() {
-		return esc_html__( 'Braintree for WooCommerce Payment Gateway', 'woocommerce-gateway-paypal-powered-by-braintree' );
+		return __( 'Braintree for WooCommerce Payment Gateway', 'woocommerce-gateway-paypal-powered-by-braintree' );
 	}
 
 
@@ -568,7 +587,7 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 
 		return sprintf( '<a href="%s">%s</a>',
 			$this->get_settings_url( $gateway_id ),
-			self::CREDIT_CARD_GATEWAY_ID === $gateway_id ? esc_html__( 'Configure Credit Card', 'woocommerce-gateway-paypal-powered-by-braintree' ) : esc_html__( 'Configure PayPal', 'woocommerce-gateway-paypal-powered-by-braintree' )
+			self::CREDIT_CARD_GATEWAY_ID === $gateway_id ? __( 'Configure Credit Card', 'woocommerce-gateway-paypal-powered-by-braintree' ) : __( 'Configure PayPal', 'woocommerce-gateway-paypal-powered-by-braintree' )
 		);
 	}
 

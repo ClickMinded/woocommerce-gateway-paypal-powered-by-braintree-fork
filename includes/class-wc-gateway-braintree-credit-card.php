@@ -166,8 +166,8 @@ class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 
 		$params = parent::get_payment_form_js_localized_script_params();
 
-		$params['first_name_unsupported_characters'] = __( 'First name contains unsupported characters', 'woocommerce-gateway-paypal-powered-by-braintree' );
-		$params['last_name_unsupported_characters']  = __( 'Last name contains unsupported characters', 'woocommerce-gateway-paypal-powered-by-braintree' );
+		$params['first_name_unsupported_characters'] = esc_html__( 'First name contains unsupported characters', 'woocommerce-gateway-paypal-powered-by-braintree' );
+		$params['last_name_unsupported_characters']  = esc_html__( 'Last name contains unsupported characters', 'woocommerce-gateway-paypal-powered-by-braintree' );
 
 		return $params;
 	}
@@ -198,36 +198,36 @@ class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 	protected function get_method_form_fields() {
 
 		$fraud_tool_options = array(
-			'basic'    => __( 'Basic', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-			'advanced' => __( 'Advanced (must also enable advanced fraud tools in your Braintree control panel)', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'basic'    => esc_html__( 'Basic', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'advanced' => esc_html__( 'Advanced (must also enable advanced fraud tools in your Braintree control panel)', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 		);
 
 		// Kount is only available for manual API connections
 		if ( $this->is_kount_supported() ) {
-			$fraud_tool_options['kount_direct'] = __( 'Kount Direct (need to contact Braintree support to activate this)', 'woocommerce-gateway-paypal-powered-by-braintree' );
+			$fraud_tool_options['kount_direct'] = esc_html__( 'Kount Direct (need to contact Braintree support to activate this)', 'woocommerce-gateway-paypal-powered-by-braintree' );
 		}
 
 		$fields = array(
 
 			// fraud tools
 			'fraud_settings_title' => array(
-				'title' => __( 'Fraud Settings', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'title' => esc_html__( 'Fraud Settings', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'type'  => 'title',
 			),
 			'fraud_tool'           => array(
-				'title'       => __( 'Fraud Tool', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'title'       => esc_html__( 'Fraud Tool', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'type'        => 'select',
 				'class'       => 'js-fraud-tool',
-				'desc_tip'    => __( 'Select the fraud tool you want to use. Basic is enabled by default and requires no additional configuration. Advanced requires you to enable advanced fraud tools in your Braintree control panel. To use Kount Direct you must contact Braintree support.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'desc_tip'    => esc_html__( 'Select the fraud tool you want to use. Basic is enabled by default and requires no additional configuration. Advanced requires you to enable advanced fraud tools in your Braintree control panel. To use Kount Direct you must contact Braintree support.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				/* translators: Placeholders %1$s - opening HTML <a> link tag, closing HTML </a> link tag */
-				'description' => sprintf( __( 'Read more details on fraud and verification tools in the extension %1$sdocumentation%2$s.', 'woocommerce-gateway-paypal-powered-by-braintree' ), '<a href="' . esc_url( $this->get_plugin()->get_documentation_url() ) . '#fraud-and-verification-tools">', '</a>' ),
+				'description' => sprintf( esc_html__( 'Read more details on fraud and verification tools in the extension %1$sdocumentation%2$s.', 'woocommerce-gateway-paypal-powered-by-braintree' ), '<a href="' . esc_url( $this->get_plugin()->get_documentation_url() ) . '#fraud-and-verification-tools">', '</a>' ),
 				'options'     => $fraud_tool_options,
 			),
 			'kount_merchant_id'    => array(
-				'title'    => __( 'Kount merchant ID', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'title'    => esc_html__( 'Kount merchant ID', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'type'     => 'text',
 				'class'    => 'js-kount-merchant-id',
-				'desc_tip' => __( 'Speak with your account management team at Braintree to get this.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'desc_tip' => esc_html__( 'Speak with your account management team at Braintree to get this.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			),
 		);
 
@@ -259,25 +259,25 @@ class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 
 		$fields = array(
 			'threed_secure_title' => array(
-				'title'       => __( '3D Secure', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'title'       => esc_html__( '3D Secure', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'type'        => 'title',
-				'description' => sprintf( __( '3D Secure benefits cardholders and merchants by providing an additional layer of verification using Verified by Visa, MasterCard SecureCode, and American Express SafeKey. %1$sLearn more about 3D Secure%2$s.', 'woocommerce-gateway-paypal-powered-by-braintree' ), '<a href="' . esc_url( $this->get_plugin()->get_documentation_url() ) . '#3d-secure' . '">', '</a>' ),
+				'description' => sprintf( esc_html__( '3D Secure benefits cardholders and merchants by providing an additional layer of verification using Verified by Visa, MasterCard SecureCode, and American Express SafeKey. %1$sLearn more about 3D Secure%2$s.', 'woocommerce-gateway-paypal-powered-by-braintree' ), '<a href="' . esc_url( $this->get_plugin()->get_documentation_url() ) . '#3d-secure' . '">', '</a>' ),
 			),
 			'threed_secure_mode' => array(
-				'title'       => __( 'Level', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'title'       => esc_html__( 'Level', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'type'        => 'select',
-				'label'       => __( 'Only accept payments when the liability is shifted', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'label'       => esc_html__( 'Only accept payments when the liability is shifted', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'default'     => self::THREED_SECURE_MODE_STANDARD,
 				'options'     => array(
-					self::THREED_SECURE_MODE_STANDARD => __( 'Standard', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-					self::THREED_SECURE_MODE_STRICT   => __( 'Strict', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					self::THREED_SECURE_MODE_STANDARD => esc_html__( 'Standard', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					self::THREED_SECURE_MODE_STRICT   => esc_html__( 'Strict', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				),
 			),
 			'threed_secure_card_types' => array(
-				'title'       => __( 'Supported Card Types', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'title'       => esc_html__( 'Supported Card Types', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'type'        => 'multiselect',
 				'class'       => 'wc-enhanced-select',
-				'description' => __( '3D Secure validation will only occur for these cards.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'description' => esc_html__( '3D Secure validation will only occur for these cards.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'default'     => array_keys( $default_card_types ),
 				'options'     => $card_types,
 			),
@@ -299,8 +299,8 @@ class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 	protected function add_csc_form_fields( $form_fields ) {
 
 		$form_fields['require_csc'] = array(
-			'title'   => __( 'Card Verification (CSC)', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-			'label'   => __( 'Display and Require the Card Security Code (CVV/CID) field on checkout', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'title'   => esc_html__( 'Card Verification (CSC)', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'label'   => esc_html__( 'Display and Require the Card Security Code (CVV/CID) field on checkout', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			'type'    => 'checkbox',
 			'default' => 'yes',
 		);
@@ -879,21 +879,39 @@ class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 	 * @return string nonce
 	 */
 	public function get_3d_secure_nonce_for_token( $token ) {
+		$token_data = $this->get_3d_secure_data_for_token( $token );
+		return $token_data['nonce'] ?? null;
+	}
 
-		$nonce = null;
+	/**
+	 * Get a payment nonce and bin data for an existing payment token
+	 * So that 3D Secure verification can be performed on a saved payment method
+	 *
+	 * @link https://developers.braintreepayments.com/guides/3d-secure/server-side/php#vaulted-credit-card-nonces
+	 *
+	 * @since x.x.x
+	 *
+	 * @param \WC_Braintree_Payment_Method $token payment method.
+	 * @return array 3d secure nonce and bin data
+	 */
+	public function get_3d_secure_data_for_token( $token ) {
+		$data = array(
+			'nonce' => null,
+			'bin'   => null,
+		);
 
 		try {
 
 			$result = $this->get_api()->get_nonce_from_payment_token( $token->get_id() );
 
-			$nonce = $result->get_nonce();
+			$data['nonce'] = $result->get_nonce();
+			$data['bin']   = $result->get_bin();
 
 		} catch ( Framework\SV_WC_Plugin_Exception $e ) {
-
 			$this->add_debug_message( $e->getMessage(), 'error' );
 		}
 
-		return $nonce;
+		return $data;
 	}
 
 
@@ -952,7 +970,7 @@ class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 					}
 
 					if ( in_array( $payment_method->get_3d_secure_status(), $decline_statuses, true ) ) {
-						$error = __( 'We cannot process your order with the payment information that you provided. Please use an alternate payment method.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+						$error = esc_html__( 'We cannot process your order with the payment information that you provided. Please use an alternate payment method.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 					}
 				}
 
@@ -960,7 +978,7 @@ class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 
 				$this->add_debug_message( $e->getMessage(), 'error' );
 
-				$error = __( 'Oops, there was a temporary payment error. Please try another payment method or contact us to complete your transaction.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+				$error = esc_html__( 'Oops, there was a temporary payment error. Please try another payment method or contact us to complete your transaction.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 			}
 
 			if ( $error ) {

@@ -61,7 +61,7 @@ class WC_Braintree_API_Credit_Card_Transaction_Response extends WC_Braintree_API
 	public function get_payment_token() {
 
 		if ( empty( $this->response->transaction->creditCardDetails->token ) ) {
-			throw new Framework\SV_WC_Payment_Gateway_Exception( __( 'Required credit card token is missing or empty!', 'woocommerce-gateway-paypal-powered-by-braintree' ) );
+			throw new Framework\SV_WC_Payment_Gateway_Exception( esc_html__( 'Required credit card token is missing or empty!', 'woocommerce-gateway-paypal-powered-by-braintree' ) );
 		}
 
 		$data = array(

@@ -281,36 +281,36 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 
 		$form_fields['button_appearance_title'] = [
 			'type'  => 'title',
-			'title' => __( 'Button Appearance', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'title' => esc_html__( 'Button Appearance', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 		];
 
 		$form_fields['button_color'] = [
 			'type'  => 'select',
-			'title' => __( 'Button Color', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'title' => esc_html__( 'Button Color', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			'options' => [
-				'gold'   => __( 'Gold', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-				'blue'   => __( 'Blue', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-				'silver' => __( 'Silver', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-				'white'  => __( 'White', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-				'black'  => __( 'Black', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'gold'   => esc_html__( 'Gold', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'blue'   => esc_html__( 'Blue', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'silver' => esc_html__( 'Silver', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'white'  => esc_html__( 'White', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'black'  => esc_html__( 'Black', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			],
 			'default' => 'gold',
 		];
 
 		$form_fields['button_size'] = [
 			'type'  => 'select',
-			'title' => __( 'Button Size', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'title' => esc_html__( 'Button Size', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			'options' => [
-				'medium'     => __( 'Medium', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-				'large'      => __( 'Large', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-				'responsive' => __( 'Responsive', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'medium'     => esc_html__( 'Medium', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'large'      => esc_html__( 'Large', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'responsive' => esc_html__( 'Responsive', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			],
 			'default' => 'responsive',
 		];
 
 		$form_fields['button_shape'] = [
 			'type'  => 'select',
-			'title' => __( 'Button Shape', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'title' => esc_html__( 'Button Shape', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			'options' => [
 				'pill' => _x( 'Pill', 'button shape option', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'rect' => _x( 'Rectangle', 'button shape option', 'woocommerce-gateway-paypal-powered-by-braintree' ),
@@ -321,47 +321,47 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 		if( $this->is_paypal_pay_later_supported() ) {
 
 			$form_fields['enable_paypal_pay_later'] = [
-				'title'       => __( 'PayPal Pay Later offers', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'title'       => esc_html__( 'PayPal Pay Later offers', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'type'        => 'checkbox',
-				'label'       => __( 'Show the Pay Later button beneath the standard PayPal button', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-				'desc_tip'    => __( 'Pay Later buttons and messaging are only shown to eligible buyers', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'label'       => esc_html__( 'Show the Pay Later button beneath the standard PayPal button', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'desc_tip'    => esc_html__( 'Pay Later buttons and messaging are only shown to eligible buyers', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'description' => $this->get_settings_description_text(),
 				'default'     => 'yes',
 			];
 
 			$form_fields['pay_later_messaging_logo_type'] = [
-				'title'       => __( 'Pay Later Messaging Logo Type', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'title'       => esc_html__( 'Pay Later Messaging Logo Type', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'type'        => 'select',
 				'options'     => [
-					'primary'     => __( 'Single-line PayPal logo', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-					'alternative' => __( '"PP" monogram logo', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-					'inline'      => __( 'PayPal logo inline with the content', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-					'none'        => __( 'No logo, text only', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					'primary'     => esc_html__( 'Single-line PayPal logo', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					'alternative' => esc_html__( '"PP" monogram logo', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					'inline'      => esc_html__( 'PayPal logo inline with the content', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					'none'        => esc_html__( 'No logo, text only', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				],
 				'default'     => 'inline',
 				'class'       => 'pay-later-field',
 			];
 
 			$form_fields['pay_later_messaging_logo_position'] = [
-				'title'       => __( 'Pay Later Messaging Logo Position', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'title'       => esc_html__( 'Pay Later Messaging Logo Position', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'type'        => 'select',
 				'options'     => [
-					'left'  => __( 'Logo left of the text', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-					'right' => __( 'Logo right of the text', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-					'top'   => __( 'Logo above the text', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					'left'  => esc_html__( 'Logo left of the text', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					'right' => esc_html__( 'Logo right of the text', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					'top'   => esc_html__( 'Logo above the text', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				],
 				'default'     => 'left',
 				'class'       => 'pay-later-field',
 			];
 
 			$form_fields['pay_later_messaging_text_color'] = [
-				'title'       => __( 'Pay Later Messaging Text Color', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				'title'       => esc_html__( 'Pay Later Messaging Text Color', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'type'        => 'select',
 				'options'     => [
-					'black'      => __( 'Black text with colored logo', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-					'white'      => __( 'White text with a white logo', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-					'monochrome' => __( 'Black text with a black logo', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-					'grayscale'  => __( 'Black text with a grayscale logo', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					'black'      => esc_html__( 'Black text with colored logo', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					'white'      => esc_html__( 'White text with a white logo', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					'monochrome' => esc_html__( 'Black text with a black logo', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					'grayscale'  => esc_html__( 'Black text with a grayscale logo', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				],
 				'default'     => 'black',
 				'class'       => 'pay-later-field',
@@ -373,26 +373,26 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 		];
 
 		$form_fields['enable_product_buy_now'] = [
-			'title' => __( 'Buy Now on Product Pages', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-			'label' => __( 'Add the PayPal Buy Now button to product pages.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'title' => esc_html__( 'Buy Now on Product Pages', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'label' => esc_html__( 'Add the PayPal Buy Now button to product pages.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			'type' => 'checkbox',
 			'default' => 'yes',
 		];
 
 		$form_fields['enable_cart_checkout'] = array(
-			'title'   => __( 'Enable Cart Checkout', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'title'   => esc_html__( 'Enable Cart Checkout', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			'type'    => 'checkbox',
-			'label'   => __( 'Allow customers to check out with PayPal from the Cart page', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'label'   => esc_html__( 'Allow customers to check out with PayPal from the Cart page', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			'default' => 'yes',
 		);
 
 		$form_fields['disable_funding'] = array(
-			'title'        => __( 'Disable funding sources', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'title'        => esc_html__( 'Disable funding sources', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			'type'         => 'multiselect',
 			'class'       => 'wc-enhanced-select',
 			'default'      => array(),
 			'desc_tip'     => true,
-			'description'  => __(
+			'description'  => esc_html__(
 				'By default all possible funding sources will be shown. You can disable some sources, if you wish.',
 				'woocommerce-paypal-payments'
 			),
@@ -436,7 +436,7 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 			<td class="forminp">
 				<div id="wc_braintree_paypal_button_preview_container" style="max-width: 400px; pointer-events: none;">
 					<?php if ( $this->is_paypal_pay_later_supported() ) : ?>
-						<div id="wc_braintree_paypal_pay_later_message_preview" data-pp-layout="text" <?php echo $this->get_pay_later_messaging_style_attributes(); ?>></div>
+						<div id="wc_braintree_paypal_pay_later_message_preview" data-pp-layout="text" <?php echo wp_kses( $this->get_pay_later_messaging_style_attributes(), '' ); ?>></div>
 					<?php endif; ?>
 					<div id="wc_braintree_paypal_button_preview" style="max-width:400px; pointer-events:none;"></div>
 					<div id="wc_braintree_paypal_button_preview_paylater" style="max-width:400px; pointer-events:none;"></div>
@@ -458,8 +458,8 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 	 */
 	protected function get_paypal_sdk_url() {
 
-        // gets the store country
-        $buyer_country = WC()->countries->get_base_country();
+		// Gets the store country.
+		$buyer_country = WC()->countries->get_base_country();
 
 		$args = [
 			'client-id'     => $this->get_sandbox_sdk_client_id( $buyer_country ),
@@ -468,11 +468,11 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 			'currency'      => get_woocommerce_currency(),
 		];
 
-        if ( $this->should_force_buyer_country_on_loading_sdk() && ( $buyer_country = get_user_meta( wp_get_current_user()->ID, 'billing_country', true ) ) ) {
-            $args['buyer-country'] = $buyer_country;
-        }
+		if ( $this->should_force_buyer_country_on_loading_sdk() && ( $buyer_country = get_user_meta( wp_get_current_user()->ID, 'billing_country', true ) ) ) {
+			$args['buyer-country'] = $buyer_country;
+		}
 
-		return add_query_arg( rawurlencode_deep( $args ), 'https://www.paypal.com/sdk/js' );
+		return esc_url( add_query_arg( rawurlencode_deep( $args ), 'https://www.paypal.com/sdk/js' ) );
 	}
 
 
@@ -588,16 +588,16 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 			// order note, e.g. Braintree (PayPal) Sandbox Payment Approved (Transaction ID ABC)
 			/* translators: Placeholders: %1$s - payment method title (e.g. PayPal), %2$s - transaction environment (either Sandbox or blank string), %3$s - type of transaction (either Authorization or Payment) */
 			$message = sprintf(
-				__( '%1$s %2$s %3$s Approved', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				esc_html__( '%1$s %2$s %3$s Approved', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				$this->get_method_title(),
-				$this->is_test_environment() ? __( 'Sandbox', 'woocommerce-gateway-paypal-powered-by-braintree' ) : '',
-				$this->perform_credit_card_authorization( $order ) ? __( 'Authorization', 'woocommerce-gateway-paypal-powered-by-braintree' ) : __( 'Payment', 'woocommerce-gateway-paypal-powered-by-braintree' )
+				$this->is_test_environment() ? esc_html__( 'Sandbox', 'woocommerce-gateway-paypal-powered-by-braintree' ) : '',
+				$this->perform_credit_card_authorization( $order ) ? esc_html__( 'Authorization', 'woocommerce-gateway-paypal-powered-by-braintree' ) : esc_html__( 'Payment', 'woocommerce-gateway-paypal-powered-by-braintree' )
 			);
 
 			// adds the transaction id (if any) to the order note
 			if ( $response->get_transaction_id() ) {
 				/* translators: Placeholders: %s - transaction ID */
-				$message .= ' ' . sprintf( __( '(Transaction ID %s)', 'woocommerce-gateway-paypal-powered-by-braintree' ), $response->get_transaction_id() );
+				$message .= ' ' . sprintf( esc_html__( '(Transaction ID %s)', 'woocommerce-gateway-paypal-powered-by-braintree' ), $response->get_transaction_id() );
 			}
 
 			$order->add_order_note( $message );
@@ -618,7 +618,7 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 	 */
 	protected function get_saved_payment_token_order_note( $token ) {
 
-		return sprintf( __( 'PayPal Account Saved: %s', 'woocommerce-gateway-paypal-powered-by-braintree' ), $token->get_payer_email() );
+		return sprintf( esc_html__( 'PayPal Account Saved: %s', 'woocommerce-gateway-paypal-powered-by-braintree' ), $token->get_payer_email() );
 	}
 
 
@@ -725,7 +725,7 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 	 */
 	protected function get_default_title() {
 
-		return __( 'PayPal', 'woocommerce-gateway-paypal-powered-by-braintree' );
+		return esc_html__( 'PayPal', 'woocommerce-gateway-paypal-powered-by-braintree' );
 	}
 
 
@@ -739,7 +739,7 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 	 */
 	protected function get_default_description() {
 
-		return __( 'Click the PayPal icon below to sign into your PayPal account and pay securely.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+		return esc_html__( 'Click the PayPal icon below to sign into your PayPal account and pay securely.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 	}
 
 
@@ -1170,7 +1170,7 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 		$country = WC()->countries->get_base_country();
 
 		if ( 'FR' === $country ) {
-			return __( 'Displays Pay Later messaging for available offers. Vaulted payment/billing agreement integrations and some merchant categories are not eligible to promote Pay in 4X. You may not add additional content, wording, marketing or other material to encourage use. PayPal reserves the right to take action in accordance with the User agreement.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+			return esc_html__( 'Displays Pay Later messaging for available offers. Vaulted payment/billing agreement integrations and some merchant categories are not eligible to promote Pay in 4X. You may not add additional content, wording, marketing or other material to encourage use. PayPal reserves the right to take action in accordance with the User agreement.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 		}
 
 		// replaces the United Kingdom country code to UK as accepted by the PayPal learn more link

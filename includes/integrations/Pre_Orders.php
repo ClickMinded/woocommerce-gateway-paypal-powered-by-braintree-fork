@@ -53,11 +53,11 @@ class Pre_Orders extends Framework\SV_WC_Payment_Gateway_Integration_Pre_Orders 
 			$order = $this->get_gateway()->get_order( $order->get_id() );
 
 			// order description
-			$order->description = sprintf( __( '%s - Pre-Order Release Payment for Order %s', 'woocommerce-gateway-paypal-powered-by-braintree' ), esc_html( Framework\SV_WC_Helper::get_site_name() ), $order->get_order_number() );
+			$order->description = sprintf( esc_html__( '%s - Pre-Order Release Payment for Order %s', 'woocommerce-gateway-paypal-powered-by-braintree' ), esc_html( Framework\SV_WC_Helper::get_site_name() ), $order->get_order_number() );
 
 			// token is required
 			if ( ! $order->payment->token ) {
-				throw new Framework\SV_WC_Payment_Gateway_Exception( __( 'Payment token missing/invalid.', 'woocommerce-gateway-paypal-powered-by-braintree' ) );
+				throw new Framework\SV_WC_Payment_Gateway_Exception( esc_html__( 'Payment token missing/invalid.', 'woocommerce-gateway-paypal-powered-by-braintree' ) );
 			}
 
 			// perform the transaction
@@ -93,20 +93,20 @@ class Pre_Orders extends Framework\SV_WC_Payment_Gateway_Integration_Pre_Orders 
 				} elseif ( $this->get_gateway()->is_echeck_gateway() ) {
 
 					// account type (checking/savings) may or may not be available, which is fine
-					$message = sprintf( __( '%s eCheck Pre-Order Release Payment Approved: %s ending in %s', 'woocommerce-gateway-paypal-powered-by-braintree' ), $this->get_gateway()->get_method_title(), Framework\SV_WC_Payment_Gateway_Helper::payment_type_to_name( ( ! empty( $order->payment->account_type ) ? $order->payment->account_type : 'bank' ) ), $last_four );
+					$message = sprintf( esc_html__( '%s eCheck Pre-Order Release Payment Approved: %s ending in %s', 'woocommerce-gateway-paypal-powered-by-braintree' ), $this->get_gateway()->get_method_title(), Framework\SV_WC_Payment_Gateway_Helper::payment_type_to_name( ( ! empty( $order->payment->account_type ) ? $order->payment->account_type : 'bank' ) ), $last_four );
 
 				} else {
 
 					$message = sprintf(
 					/* translators: Placeholders: %s - payment method title, like PayPal */
-						__( '%s Pre-Order Release Payment Approved', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+					esc_html__( '%s Pre-Order Release Payment Approved', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 						$this->get_gateway()->get_method_title()
 					);
 				}
 
 				// adds the transaction id (if any) to the order note
 				if ( $response->get_transaction_id() ) {
-					$message .= ' ' . sprintf( __( '(Transaction ID %s)', 'woocommerce-gateway-paypal-powered-by-braintree' ), $response->get_transaction_id() );
+					$message .= ' ' . sprintf( esc_html__( '(Transaction ID %s)', 'woocommerce-gateway-paypal-powered-by-braintree' ), $response->get_transaction_id() );
 				}
 
 				$order->add_order_note( $message );
@@ -122,8 +122,17 @@ class Pre_Orders extends Framework\SV_WC_Payment_Gateway_Integration_Pre_Orders 
 
 				// if the transaction was held (ie fraud validation failure) mark it as such
 				if ( $response->transaction_held() || ( $this->get_gateway()->supports( Framework\SV_WC_Payment_Gateway::FEATURE_CREDIT_CARD_AUTHORIZATION ) && $this->get_gateway()->perform_credit_card_authorization( $order ) ) ) {
+					
+					$status_text = $response->get_status_message();
+					if( $this->get_gateway()->supports(Framework\SV_WC_Payment_Gateway::FEATURE_CREDIT_CARD_AUTHORIZATION ) && $this->get_gateway()->perform_credit_card_authorization( $order )  ) {
+						$status_text = esc_html__( 'Authorization only transaction', 'woocommerce-gateway-paypal-powered-by-braintree' );
+					}
 
-					$this->get_gateway()->mark_order_as_held( $order, $this->get_gateway()->supports( Framework\SV_WC_Payment_Gateway::FEATURE_CREDIT_CARD_AUTHORIZATION ) && $this->get_gateway()->perform_credit_card_authorization( $order ) ? __( 'Authorization only transaction', 'woocommerce-gateway-paypal-powered-by-braintree' ) : $response->get_status_message(), $response );
+					$this->get_gateway()->mark_order_as_held( 
+						$order, 
+						$status_text,
+						$response 
+					);
 
 					wc_reduce_stock_levels( $order->get_id() );
 
@@ -143,7 +152,7 @@ class Pre_Orders extends Framework\SV_WC_Payment_Gateway_Integration_Pre_Orders 
 		} catch ( Framework\SV_WC_Plugin_Exception $e ) {
 
 			// Mark order as failed
-			$this->get_gateway()->mark_order_as_failed( $order, sprintf( __( 'Pre-Order Release Payment Failed: %s', 'woocommerce-gateway-paypal-powered-by-braintree' ), $e->getMessage() ) );
+			$this->get_gateway()->mark_order_as_failed( $order, sprintf( esc_html__( 'Pre-Order Release Payment Failed: %s', 'woocommerce-gateway-paypal-powered-by-braintree' ), $e->getMessage() ) );
 
 		}
 	}

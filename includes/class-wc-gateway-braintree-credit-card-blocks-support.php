@@ -105,13 +105,16 @@ final class WC_Gateway_Braintree_Credit_Card_Blocks_Support extends WC_Gateway_B
 			$nonce = '';
 
 			if ( $gateway->card_type_supports_3d_secure( $token->get_card_type() ) ) {
-				$nonce = $gateway->get_3d_secure_nonce_for_token( $token );
+				$nonce_data = $gateway->get_3d_secure_data_for_token( $token );
+				$nonce      = $nonce_data['nonce'] ?? '';
+				$bin        = $nonce_data['bin'] ?? '';
 			}
 
 			wp_send_json_success(
 				array(
 					'token' => $core_token->get_token(),
 					'nonce' => $nonce,
+					'bin'   => $bin,
 				)
 			);
 

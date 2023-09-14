@@ -114,8 +114,8 @@ class WC_Braintree_PayPal_Payment_Form extends WC_Braintree_Payment_Form {
 			'is_paypal_card_enabled'          => $this->get_gateway()->is_paypal_card_enabled(),
 			'paypal_disabled_funding_options' => $disabled_funding_options,
 			'force_buyer_country'             => $force_buyer_country,
-			'must_login_message'              => __( 'Please click the "PayPal" button below to log into your PayPal account before placing your order.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-			'must_login_add_method_message'   => __( 'Please click the "PayPal" button below to log into your PayPal account before adding your payment method.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'must_login_message'              => esc_html__( 'Please click the "PayPal" button below to log into your PayPal account before placing your order.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'must_login_add_method_message'   => esc_html__( 'Please click the "PayPal" button below to log into your PayPal account before adding your payment method.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			'button_styles'                   => wp_parse_args( $button_styles, $default_button_styles ), // ensure all expected parameters are present after filtering to avoid JS errors
 			'cart_payment_nonce'              => $this->get_cart_nonce(),
 			'paypal_intent'                   => WC_Gateway_Braintree_PayPal::TRANSACTION_TYPE_AUTHORIZATION === $this->get_gateway()->get_transaction_type() ? 'authorize' : 'capture',
@@ -253,10 +253,10 @@ class WC_Braintree_PayPal_Payment_Form extends WC_Braintree_Payment_Form {
 		?>
 
 		<?php if ( $this->get_gateway()->is_paypal_pay_later_enabled() ) : ?>
-			<div id="wc_braintree_paypal_pay_later_messaging_container" <?php echo $container_style; ?> <?php echo $this->get_gateway()->get_pay_later_messaging_style_attributes(); ?>></div>
+			<div id="wc_braintree_paypal_pay_later_messaging_container"<?php echo wp_kses( $container_style, '' ); ?> <?php echo wp_kses( $this->get_gateway()->get_pay_later_messaging_style_attributes(), '' );?>></div>
 		<?php endif; ?>
 
-		<div id="wc_braintree_paypal_container" <?php echo $container_style; ?>></div>
+		<div id="wc_braintree_paypal_container" <?php echo wp_kses( $container_style, 'style' ); ?>></div>
 
 		<input type="hidden" name="wc_braintree_paypal_amount" value="<?php echo esc_attr( Framework\SV_WC_Helper::number_format( $order_total, 2 ) ); ?>" />
 		<input type="hidden" name="wc_braintree_paypal_currency" value="<?php echo esc_attr( get_woocommerce_currency() ); ?>" />

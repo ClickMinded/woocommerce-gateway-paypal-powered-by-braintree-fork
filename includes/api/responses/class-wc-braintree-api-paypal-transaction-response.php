@@ -63,7 +63,7 @@ class WC_Braintree_API_PayPal_Transaction_Response extends WC_Braintree_API_Tran
 	public function get_payment_token() {
 
 		if ( empty( $this->response->transaction->paypalDetails->token ) ) {
-			throw new Framework\SV_WC_Payment_Gateway_Exception( __( 'Required PayPal token is missing or empty!', 'woocommerce-gateway-paypal-powered-by-braintree' ) );
+			throw new Framework\SV_WC_Payment_Gateway_Exception( esc_html__( 'Required PayPal token is missing or empty!', 'woocommerce-gateway-paypal-powered-by-braintree' ) );
 		}
 
 		$data = array(

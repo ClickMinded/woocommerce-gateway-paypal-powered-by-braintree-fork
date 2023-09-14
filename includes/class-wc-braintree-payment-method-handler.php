@@ -94,9 +94,9 @@ class WC_Braintree_Payment_Method_Handler extends Framework\SV_WC_Payment_Gatewa
 		if ( ! $message && $this->get_gateway()->is_paypal_gateway() ) {
 
 			/* translators: Placeholders: %1$s - payment gateway title (PayPal), %2$s - PayPal account email address */
-			$message = sprintf( __( '%1$s Account Saved: %2$s', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-				$this->get_gateway()->get_method_title(),
-				$token->get_type_full()
+			$message = sprintf( esc_html__( '%1$s Account Saved: %2$s', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				esc_html( $this->get_gateway()->get_method_title() ),
+				esc_html( $token->get_type_full() )
 			);
 		}
 

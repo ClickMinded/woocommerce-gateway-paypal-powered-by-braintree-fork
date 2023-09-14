@@ -84,6 +84,7 @@ export const usePaymentProcessing = (
 						const tokenData = await getTokenData(token);
 						if (tokenData && tokenData.nonce) {
 							nonce = tokenData.nonce;
+							bin = tokenData.bin;
 							shouldVerify3DSecure = true;
 						}
 						paymentData.token = tokenData.token;

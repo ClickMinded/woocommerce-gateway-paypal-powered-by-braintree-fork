@@ -143,8 +143,8 @@ abstract class WC_Braintree_Payment_Form extends Framework\SV_WC_Payment_Gateway
 	protected function get_payment_form_handler_js_params() {
 
 		return [
-			'integration_error_message' => __( 'Currently unavailable. Please try a different payment method.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-			'payment_error_message'     => __( 'Oops, something went wrong. Please try a different payment method.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'integration_error_message' => esc_html__( 'Currently unavailable. Please try a different payment method.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+			'payment_error_message'     => esc_html__( 'Oops, something went wrong. Please try a different payment method.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			'ajax_url'                  => admin_url( 'admin-ajax.php' ),
 		];
 	}

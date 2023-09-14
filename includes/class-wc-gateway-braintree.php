@@ -93,23 +93,6 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts'] );
 	}
 
-
-	/**
-	 * Initializes the payment form handler.
-	 *
-	 * TODO: remove this method by version 3.0.0 or by 2021-05-05 {WV 2020-05-05}
-	 *
-	 * @since 2.2.1
-	 * @deprecated 2.4.0
-	 */
-	public function init_payment_form_handler() {
-
-		wc_deprecated_function( __METHOD__,  '2.4.0', __CLASS__ . '::init_payment_form_instance()' );
-
-		$this->init_payment_form_instance();
-	}
-
-
 	/**
 	 * Enqueues admin scripts.
 	 *
@@ -221,7 +204,7 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 		// nonce is required
 		if ( ! Framework\SV_WC_Helper::get_posted_value( 'wc_' . $this->get_id() . '_payment_nonce' ) ) {
 
-			wc_add_notice( __( 'Oops, there was a temporary payment error. Please try another payment method or contact us to complete your transaction.', 'woocommerce-gateway-paypal-powered-by-braintree' ), 'error' );
+			wc_add_notice( esc_html__( 'Oops, there was a temporary payment error. Please try another payment method or contact us to complete your transaction.', 'woocommerce-gateway-paypal-powered-by-braintree' ), 'error' );
 
 			$is_valid = false;
 		}
@@ -438,8 +421,10 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 				'title'       => __( 'Merchant Account IDs', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'type'        => 'title',
 				'description' => sprintf(
+					/* translators: 1: Opening link tag to documentation. 2: Closing link tag. */
 					esc_html__( 'Enter additional merchant account IDs if you do not want to use your Braintree account default. %1$sLearn more about merchant account IDs%2$s', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-					'<a href="' . esc_url( wc_braintree()->get_documentation_url() ). '#merchant-account-ids' . '">', '&nbsp;&rarr;</a>'
+					'<a href="' . esc_url( wc_braintree()->get_documentation_url() ) . '#multicurrency-setup">',
+					'&nbsp;&rarr;</a>'
 				),
 			),
 
@@ -699,7 +684,7 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 			$connect_url = 'https://connect.woocommerce.com/login/braintree';
 		}
 
-		return add_query_arg( $query_args, $connect_url );
+		return esc_url( add_query_arg( $query_args, $connect_url ) );
 	}
 
 
@@ -844,7 +829,8 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 		$( '.js-add-merchant-account-id' ).click( function( e ) {
 			e.preventDefault();
 
-			var row_fragment = '<?php echo $this->generate_merchant_account_id_html(); ?>',
+			// The HTML is being escaped by the function itself.
+			var row_fragment = '<?php echo $this->generate_merchant_account_id_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>',
 				currency     = $( 'select#wc_braintree_merchant_account_id_currency' ).val();
 
 			// replace currency placeholders with selected currency
@@ -913,7 +899,8 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 
 
 	/**
-	 * Generate HTML for an individual merchant account ID field
+	 * Generate HTML for an individual merchant account ID field.
+	 * Escapes the HTML before returning it.
 	 *
 	 * @since 3.0.0
 	 * @param string|null $currency_code 3 character currency code for the merchant account ID
@@ -953,6 +940,7 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 		</tr>
 		<?php
 
+		// The HTML will not be escaped by whoever is calling this function. So make sure it is escaped before returning.
 		// newlines break JS when this HTML is used as a fragment
 		return trim( preg_replace( "/[\n\r\t]/",'', ob_get_clean() ) );
 	}
@@ -962,6 +950,7 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 	 * Filter admin options before saving to dynamically inject valid merchant
 	 * account IDs so they're persisted to settings
 	 *
+	 * @since x.x.x update logic to sanitize multiple merchant account IDs.
 	 * @since 3.3.0
 	 * @param array $sanitized_fields Sanitized fields.
 	 * @return array
@@ -990,14 +979,26 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 
 			$currency_codes = array_keys( get_woocommerce_currencies() );
 
-			foreach ( rest_sanitize_array( $_POST[ $merchant_account_id_field_key ] ) as $currency => $merchant_account_id ) {
+			// Sanitize merchant account IDs.
+			$merchant_account_ids = array_map( 'sanitize_text_field', $_POST[ $merchant_account_id_field_key ] );
+
+			// Filter merchant account IDs to only valid currencies.
+			$merchant_account_ids = array_filter(
+				$merchant_account_ids,
+				static function ( $merchant_account_id, $currency ) use ( $currency_codes ) {
+					return in_array( strtoupper( $currency ), $currency_codes, true );
+				},
+				ARRAY_FILTER_USE_BOTH
+			);
+
+			foreach ( $merchant_account_ids as $currency => $merchant_account_id ) {
 
 				// sanity check for valid currency.
 				if ( ! in_array( strtoupper( $currency ), $currency_codes, true ) ) {
 					continue;
 				}
 
-				$merchant_account_key = 'merchant_account_id_' . strtolower( $currency );
+				$merchant_account_key = 'merchant_account_id_' . strtolower( esc_sql( $currency ) );
 
 				// add to persisted fields.
 				$sanitized_fields[ $merchant_account_key ] = wp_kses_post( trim( stripslashes( $merchant_account_id ) ) );
@@ -1633,7 +1634,7 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 		$result = parent::process_payment( $order_id );
 
 		// If the payment failed, add the error messages to the result.
-		if ( 'failure' === $result['result'] ) {
+		if ( 'failure' === $result['result'] && function_exists( 'wc_get_notices' ) ) {
 			$notices = wc_get_notices( 'error' );
 			if ( ! empty( $notices ) ) {
 				$messages = array();

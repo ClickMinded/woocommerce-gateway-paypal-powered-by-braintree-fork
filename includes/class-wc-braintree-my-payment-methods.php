@@ -86,12 +86,14 @@ class WC_Braintree_My_Payment_Methods extends Framework\SV_WC_Payment_Gateway_My
 			return;
 		}
 
+		// Can't escape the html being echoed here. The escaping is happening in the function itself.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $this->get_payment_method_expires_html( $token );
 	}
 
 	/**
 	 * Returns a token's expiration date HTML.
-	 *
+	 * Escapes the HTML before returning it.
 	 * @since 2.6.2
 	 * @internal
 	 * @param Framework\SV_WC_Payment_Gateway_Payment_Token $token Token object.
@@ -106,6 +108,7 @@ class WC_Braintree_My_Payment_Methods extends Framework\SV_WC_Payment_Gateway_My
 		$html .= '<input type="text" class="expires" name="expires" placeholder="MM/YY" value="' . esc_attr( $token->get_exp_date() ) . '" />';
 		$html .= '</div>';
 
+		// The html will not be escaped by whoever is calling this function. So make sure it is escaped before returning.
 		return $html;
 	}
 

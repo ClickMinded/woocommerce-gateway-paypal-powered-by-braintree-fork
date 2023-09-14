@@ -200,11 +200,11 @@ class WC_Braintree_API extends Framework\SV_WC_API_Base implements Framework\SV_
 
 				if ( $result->has_avs_rejection() ) {
 
-					$message = __( 'The billing address for this transaction does not match the cardholders.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+					$message = esc_html__( 'The billing address for this transaction does not match the cardholders.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 
 				} elseif ( $result->has_cvv_rejection() ) {
 
-					$message = __( 'The CSC for the transaction was invalid or incorrect.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+					$message = esc_html__( 'The CSC for the transaction was invalid or incorrect.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 
 				} else {
 
@@ -572,27 +572,27 @@ class WC_Braintree_API extends Framework\SV_WC_API_Base implements Framework\SV_
 		switch ( get_class( $e ) ) {
 
 			case 'Braintree\Exception\Authentication':
-				$message = __( 'Invalid Credentials, please double-check your API credentials (Merchant ID, Public Key, Private Key, and Merchant Account ID) and try again.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+				$message = esc_html__( 'Invalid Credentials, please double-check your API credentials (Merchant ID, Public Key, Private Key, and Merchant Account ID) and try again.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 			break;
 
 			case 'Braintree\Exception\Authorization':
-				$message = __( 'Authorization Failed, please verify the user for the API credentials provided can perform transactions and that the request data is correct.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+				$message = esc_html__( 'Authorization Failed, please verify the user for the API credentials provided can perform transactions and that the request data is correct.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 			break;
 
 			case 'Braintree\Exception\ServiceUnavailable':
-				$message = __( 'Braintree is currently down for maintenance, please try again later.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+				$message = esc_html__( 'Braintree is currently down for maintenance, please try again later.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 			break;
 
 			case 'Braintree\Exception\NotFound':
-				$message = __( 'The record cannot be found, please contact support.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+				$message = esc_html__( 'The record cannot be found, please contact support.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 			break;
 
 			case 'Braintree\Exception\ServerError':
-				$message = __( 'Braintree encountered an error when processing your request, please try again later or contact support.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+				$message = esc_html__( 'Braintree encountered an error when processing your request, please try again later or contact support.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 			break;
 
 			case 'Braintree\Exception\SSLCertificate':
-				$message = __( 'Braintree cannot verify your server\'s SSL certificate. Please contact your hosting provider or try again later.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+				$message = esc_html__( 'Braintree cannot verify your server\'s SSL certificate. Please contact your hosting provider or try again later.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 			break;
 
 			default:

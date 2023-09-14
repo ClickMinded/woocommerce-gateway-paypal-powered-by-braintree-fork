@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the Braintree for WooCommerce Payment Gateway package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Braintree for WooCommerce Payment Gateway 3.0.2\n"
+"Project-Id-Version: Braintree for WooCommerce Payment Gateway 3.0.5\n"
 "Report-Msgid-Bugs-To: "
 "https://woocommerce.com/my-account/marketplace-ticket-form/\n"
-"POT-Creation-Date: 2023-05-24 00:45:29+00:00\n"
+"POT-Creation-Date: 2023-08-29 22:27:41+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,52 +13,52 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: class-wc-braintree.php:203
+#: class-wc-braintree.php:193
 msgid "Connected successfully."
 msgstr ""
 
-#: class-wc-braintree.php:206
+#: class-wc-braintree.php:196
 msgid "There was an error connecting your Braintree account. Please try again."
 msgstr ""
 
-#: class-wc-braintree.php:236
+#: class-wc-braintree.php:226
 msgid "Invalid connection request"
 msgstr ""
 
-#: class-wc-braintree.php:279
+#: class-wc-braintree.php:269
 msgid "Disconnected successfully."
 msgstr ""
 
-#: class-wc-braintree.php:304
+#: class-wc-braintree.php:294
 msgid "Invalid disconnect request"
 msgstr ""
 
-#: class-wc-braintree.php:397
+#: class-wc-braintree.php:389
 msgid ""
 "Heads up! You've enabled advanced fraud tools for Braintree. Please make "
 "sure that advanced fraud tools are also enabled in your Braintree account. "
 "Need help? See the %1$sdocumentation%2$s."
 msgstr ""
 
-#: class-wc-braintree.php:415
+#: class-wc-braintree.php:407
 msgid ""
 "Braintree for WooCommerce is almost ready. To get started, %1$sconnect your "
 "Braintree account%2$s."
 msgstr ""
 
-#: class-wc-braintree.php:427
+#: class-wc-braintree.php:419
 msgid ""
 "Upgrade successful! WooCommerce Braintree deactivated, and Braintree for "
 "WooCommerce has been %1$sconfigured with your previous settings%2$s."
 msgstr ""
 
-#: class-wc-braintree.php:440
+#: class-wc-braintree.php:432
 msgid ""
 "WooCommerce is not being forced over SSL -- Using PayPal with Braintree "
 "requires that checkout to be forced over SSL."
 msgstr ""
 
-#: class-wc-braintree.php:475
+#: class-wc-braintree.php:467
 #. translators: Placeholders: %1$s - payment gateway name tag, %2$s - <a> tag,
 #. %3$s - </a> tag
 msgid ""
@@ -70,16 +70,16 @@ msgstr ""
 msgid "Braintree for WooCommerce Payment Gateway"
 msgstr ""
 
-#: class-wc-braintree.php:590
+#: class-wc-braintree.php:571
 msgid "Configure Credit Card"
 msgstr ""
 
-#: class-wc-braintree.php:590
+#: class-wc-braintree.php:571
 msgid "Configure PayPal"
 msgstr ""
 
-#: includes/PayPal/Buttons/Abstract_Button.php:601
-#: includes/class-wc-gateway-braintree.php:601
+#: includes/PayPal/Buttons/Abstract_Button.php:563
+#: includes/class-wc-gateway-braintree.php:586
 msgid "Cancel"
 msgstr ""
 
@@ -136,15 +136,6 @@ msgstr ""
 
 #: includes/api/responses/class-wc-braintree-api-paypal-transaction-response.php:66
 msgid "Required PayPal token is missing or empty!"
-msgstr ""
-
-#: includes/class-wc-braintree-frontend.php:107
-#. translators: %s - last four digits of a card/account
-msgid "ending in %s"
-msgstr ""
-
-#: includes/class-wc-braintree-frontend.php:113
-msgid "(default)"
 msgstr ""
 
 #: includes/class-wc-braintree-payment-method-handler.php:97
@@ -292,15 +283,15 @@ msgstr ""
 msgid "Display and Require the Card Security Code (CVV/CID) field on checkout"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:955
-#: includes/payment-forms/class-wc-braintree-hosted-fields-payment-form.php:151
+#: includes/class-wc-gateway-braintree-credit-card.php:973
+#: includes/payment-forms/class-wc-braintree-hosted-fields-payment-form.php:155
 msgid ""
 "We cannot process your order with the payment information that you "
 "provided. Please use an alternate payment method."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:963
-#: includes/class-wc-gateway-braintree.php:224
+#: includes/class-wc-gateway-braintree-credit-card.php:981
+#: includes/class-wc-gateway-braintree.php:207
 msgid ""
 "Oops, there was a temporary payment error. Please try another payment "
 "method or contact us to complete your transaction."
@@ -492,7 +483,7 @@ msgid "%1$s %2$s %3$s Approved"
 msgstr ""
 
 #: includes/class-wc-gateway-braintree-paypal.php:593
-#: includes/class-wc-gateway-braintree.php:1465
+#: includes/class-wc-gateway-braintree.php:1466
 msgid "Sandbox"
 msgstr ""
 
@@ -539,69 +530,70 @@ msgid ""
 "%1$sClick here to learn more.%2$s"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:394
+#: includes/class-wc-gateway-braintree.php:377
 msgid "Merchant ID"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:397
+#: includes/class-wc-gateway-braintree.php:380
 msgid "The Merchant ID for your Braintree account."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:401
+#: includes/class-wc-gateway-braintree.php:384
 msgid "Public Key"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:404
+#: includes/class-wc-gateway-braintree.php:387
 msgid "The Public Key for your Braintree account."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:408
+#: includes/class-wc-gateway-braintree.php:391
 msgid "Private Key"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:411
+#: includes/class-wc-gateway-braintree.php:394
 msgid "The Private Key for your Braintree account."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:416
+#: includes/class-wc-gateway-braintree.php:399
 msgid "Sandbox Merchant ID"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:419
+#: includes/class-wc-gateway-braintree.php:402
 msgid "The Merchant ID for your Braintree sandbox account."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:423
+#: includes/class-wc-gateway-braintree.php:406
 msgid "Sandbox Public Key"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:426
+#: includes/class-wc-gateway-braintree.php:409
 msgid "The Public Key for your Braintree sandbox account."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:430
+#: includes/class-wc-gateway-braintree.php:413
 msgid "Sandbox Private Key"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:433
+#: includes/class-wc-gateway-braintree.php:416
 msgid "The Private Key for your Braintree sandbox account."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:438
+#: includes/class-wc-gateway-braintree.php:421
 msgid "Merchant Account IDs"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:441
+#: includes/class-wc-gateway-braintree.php:425
+#. translators: 1: Opening link tag to documentation. 2: Closing link tag.
 msgid ""
 "Enter additional merchant account IDs if you do not want to use your "
 "Braintree account default. %1$sLearn more about merchant account IDs%2$s"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:450
+#: includes/class-wc-gateway-braintree.php:435
 msgid "Dynamic Descriptors"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:453
+#: includes/class-wc-gateway-braintree.php:438
 #. translators: Placeholders: %1$s - <p> tag, %2$s - </p> tag, %3$s - <a> tag,
 #. %4$s - </a> tag
 msgid ""
@@ -611,11 +603,11 @@ msgid ""
 "dynamic descriptors%4$s and are using an accepted format.%2$s"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:457
+#: includes/class-wc-gateway-braintree.php:442
 msgid "Name"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:460
+#: includes/class-wc-gateway-braintree.php:445
 msgid ""
 "The value in the business name field of a customer's statement. Company "
 "name/DBA section must be either 3, 7 or 12 characters and the product "
@@ -623,65 +615,65 @@ msgid ""
 "between for a total descriptor name of 22 characters)."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:465
+#: includes/class-wc-gateway-braintree.php:450
 msgid "Phone"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:468
+#: includes/class-wc-gateway-braintree.php:453
 msgid ""
 "The value in the phone number field of a customer's statement. Phone must "
 "be exactly 10 characters and can only contain numbers, dashes, parentheses "
 "and periods."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:473
+#: includes/class-wc-gateway-braintree.php:458
 msgid "URL"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:476
+#: includes/class-wc-gateway-braintree.php:461
 msgid ""
 "The value in the URL/web address field of a customer's statement. The URL "
 "must be 13 characters or less."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:516
+#: includes/class-wc-gateway-braintree.php:501
 msgid "Enter connection credentials manually"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:558
+#: includes/class-wc-gateway-braintree.php:543
 msgid "Connect/Disconnect"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:562
+#: includes/class-wc-gateway-braintree.php:547
 msgid ""
 "You just connected your Braintree account to WooCommerce. You can start "
 "taking payments now."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:563
+#: includes/class-wc-gateway-braintree.php:548
 msgid ""
 "Once you have processed a payment, PayPal will review your application for "
 "final approval. Before you ship any goods make sure you have received a "
 "final approval for your Braintree account."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:564
+#: includes/class-wc-gateway-braintree.php:549
 msgid "Questions? We are a phone call away: 1-855-489-0345."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:575
+#: includes/class-wc-gateway-braintree.php:560
 msgid "Disconnect from Braintree for WooCommerce"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:585
+#: includes/class-wc-gateway-braintree.php:570
 msgid "Braintree for WooCommerce"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:587
+#: includes/class-wc-gateway-braintree.php:572
 msgid "Close modal panel and cancel"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:593
+#: includes/class-wc-gateway-braintree.php:578
 #. translators: Placeholders %1$s - opening HTML <a> link tag, closing HTML
 #. </a> link tag
 msgid ""
@@ -689,35 +681,35 @@ msgid ""
 "keys%2$s to reconnect. Do you want to proceed with disconnecting?"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:605
+#: includes/class-wc-gateway-braintree.php:590
 msgid "Disconnect"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:735
+#: includes/class-wc-gateway-braintree.php:720
 msgid "Add merchant account ID for %s"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:742
+#: includes/class-wc-gateway-braintree.php:727
 msgid "Add merchant account ID"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:840
+#: includes/class-wc-gateway-braintree.php:825
 msgid "Add merchant account ID for "
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:938
+#: includes/class-wc-gateway-braintree.php:925
 msgid "Merchant Account ID (%s)"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:949
+#: includes/class-wc-gateway-braintree.php:936
 msgid "Enter merchant account ID"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:950
+#: includes/class-wc-gateway-braintree.php:937
 msgid "Remove this merchant account ID"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree.php:1465
+#: includes/class-wc-gateway-braintree.php:1466
 msgid "Production"
 msgstr ""
 
@@ -742,11 +734,11 @@ msgstr ""
 msgid "%s Pre-Order Release Payment Approved"
 msgstr ""
 
-#: includes/integrations/Pre_Orders.php:126
+#: includes/integrations/Pre_Orders.php:128
 msgid "Authorization only transaction"
 msgstr ""
 
-#: includes/integrations/Pre_Orders.php:146
+#: includes/integrations/Pre_Orders.php:155
 msgid "Pre-Order Release Payment Failed: %s"
 msgstr ""
 
@@ -758,7 +750,7 @@ msgstr ""
 msgid "Oops, something went wrong. Please try a different payment method."
 msgstr ""
 
-#: includes/payment-forms/class-wc-braintree-hosted-fields-payment-form.php:99
+#: includes/payment-forms/class-wc-braintree-hosted-fields-payment-form.php:103
 msgid "Expiration (MMYY)"
 msgstr ""
 
@@ -790,10 +782,10 @@ msgid ""
 "%2$s."
 msgstr ""
 
-#: woocommerce-gateway-paypal-powered-by-braintree.php:521
+#: woocommerce-gateway-paypal-powered-by-braintree.php:523
 msgid ""
-"<strong>Warning:</strong> Deleting a user will also delete the user's "
-"payment method saved on Braintree account."
+"%1$sWarning:%2$s Deleting a user will also delete the user's payment method "
+"saved on Braintree account."
 msgstr ""
 
 #. Plugin URI of the plugin/theme
@@ -815,11 +807,6 @@ msgstr ""
 
 #. Author URI of the plugin/theme
 msgid "http://woocommerce.com/"
-msgstr ""
-
-#: includes/class-wc-braintree-frontend.php:55
-msgctxt "Payment Method Type"
-msgid "Type"
 msgstr ""
 
 #: includes/class-wc-gateway-braintree-paypal.php:315

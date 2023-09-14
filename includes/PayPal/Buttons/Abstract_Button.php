@@ -231,25 +231,6 @@ abstract class Abstract_Button extends Framework\Handlers\Script_Handler {
 		return (array) apply_filters( 'wc_' . $this->get_gateway()->get_id() . '_button_js_handler_params', $args, $this );
 	}
 
-
-	/**
-	 * Gets the JS handler params.
-	 *
-	 * TODO: remove this method by version 3.0.0 or by 2021-05-07 {WV 2020-05-07}
-	 *
-	 * @since 2.3.0
-	 * @deprecated 2.4.0
-	 *
-	 * @return array
-	 */
-	protected function get_js_handler_params() {
-
-		wc_deprecated_function( __METHOD__, '2.4.0', __CLASS__ . '::get_js_handler_args()' );
-
-		return $this->get_js_handler_args();
-	}
-
-
 	/**
 	 * Gets additional JS Handler params - Override in concrete classes.
 	 *
@@ -306,10 +287,10 @@ abstract class Abstract_Button extends Framework\Handlers\Script_Handler {
 		?>
 
 		<?php if ( $this->get_gateway()->is_paypal_pay_later_enabled() ) : ?>
-			<div id="wc_braintree_paypal_pay_later_messaging_container" <?php echo $container_style; ?> <?php echo $this->get_gateway()->get_pay_later_messaging_style_attributes(); ?>></div>
+			<div id="wc_braintree_paypal_pay_later_messaging_container" <?php echo wp_kses( $container_style, '' ); ?> <?php echo wp_kses( $this->get_gateway()->get_pay_later_messaging_style_attributes(),'' ); ?>></div>
 		<?php endif; ?>
 
-		<div id="<?php echo esc_attr( 'wc_' . $this->get_gateway()->get_id() . '_container' ); ?>" <?php echo $container_style; ?>></div>
+		<div id="<?php echo esc_attr( 'wc_' . $this->get_gateway()->get_id() . '_container' ); ?>" <?php echo wp_kses( $container_style, 'style' ); ?>></div>
 
 		<?php foreach ( $this->get_button_params() as $key => $value ) : ?>
 
@@ -446,25 +427,6 @@ abstract class Abstract_Button extends Framework\Handlers\Script_Handler {
 
 		return $needs_shipping;
 	}
-
-
-	/**
-	 * Gets the JS handler class name.
-	 *
-	 * TODO: remove this method by version 3.0.0 or by 2021-05-07 {WV 2020-05-07}
-	 *
-	 * @since 2.3.0
-	 * @deprecated 2.4.0
-	 *
-	 * @return string
-	 */
-	protected function get_js_handler_name() {
-
-		wc_deprecated_function( __METHOD__, '2.4.0', __CLASS__ . '::get_js_handler_class_name()' );
-
-		return $this->get_js_handler_class_name();
-	}
-
 
 	/**
 	 * Sets the checkout address value if it's available from the PayPal session.

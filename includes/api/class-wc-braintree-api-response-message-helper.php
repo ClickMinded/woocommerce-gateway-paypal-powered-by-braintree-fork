@@ -134,7 +134,7 @@ class WC_Braintree_API_Response_Message_Helper extends Framework\SV_WC_Payment_G
 		switch ( $message_id ) {
 
 			case 'paypal_closed':
-				$message = __( 'Sorry, we cannot process your transaction. The PayPal account is either locked or closed. Please use a different account or a different payment method.', 'woocommerce-gateway-paypal-powered-by-braintree' );
+				$message = esc_html__( 'Sorry, we cannot process your transaction. The PayPal account is either locked or closed. Please use a different account or a different payment method.', 'woocommerce-gateway-paypal-powered-by-braintree' );
 				break;
 
 			default:
