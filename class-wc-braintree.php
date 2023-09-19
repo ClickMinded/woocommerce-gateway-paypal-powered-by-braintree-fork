@@ -23,6 +23,7 @@
  */
 
 use SkyVerge\WooCommerce\PluginFramework\v5_10_15 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_10_15\SV_WC_Payment_Gateway_Payment_Token;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -35,7 +36,7 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 
 
 	/** plugin version number */
-	const VERSION = '3.0.5.1'; // WRCS: DEFINED_VERSION.
+	const VERSION = '3.0.6.1'; // WRCS: DEFINED_VERSION.
 
 	/** Braintree JS SDK version  */
 	const BRAINTREE_JS_SDK_VERSION = '3.94.0';
@@ -92,6 +93,36 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 		// handle Braintree Auth connect/disconnect
 		add_action( 'admin_init', [ $this, 'handle_auth_connect' ] );
 		add_action( 'admin_init', [ $this, 'handle_auth_disconnect' ] );
+
+		// Filter the payment method for subscriptions. Runs late to ensure it runs after the SkyVerge Subscriptions integration.
+		add_filter( 'woocommerce_my_subscriptions_payment_method', array( $this, 'maybe_filter_my_subscriptions_payment_method' ), 15, 2 );
+	}
+
+	/**
+	 * Render the payment method used for a subscription in the "My Subscriptions" table
+	 *
+	 * @since 3.0.6
+	 *
+	 * @param string           $payment_method_to_display The default payment method text to display.
+	 * @param \WC_Subscription $subscription              The subscription object.
+	 * @return string The subscription payment method
+	 */
+	public function maybe_filter_my_subscriptions_payment_method( $payment_method_to_display, $subscription ) {
+		if ( $subscription->get_payment_method( 'edit' ) !== self::PAYPAL_GATEWAY_ID ) {
+			return $payment_method_to_display;
+		}
+
+		$token = $this->get_gateway( self::PAYPAL_GATEWAY_ID )->get_payment_tokens_handler()->get_token( $subscription->get_user_id(), $this->get_gateway( self::PAYPAL_GATEWAY_ID )->get_order_meta( $subscription, 'payment_token' ) );
+
+		if ( $token instanceof SV_WC_Payment_Gateway_Payment_Token ) {
+			$payment_method_to_display = sprintf(
+				/* translators: %s - PayPal email address */
+				esc_html__( 'Via PayPal - %s', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				esc_html( $token->get_payer_email() )
+			);
+		}
+
+		return $payment_method_to_display;
 	}
 
 

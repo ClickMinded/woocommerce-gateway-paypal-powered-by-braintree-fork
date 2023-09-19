@@ -1,5 +1,11 @@
 *** Changelog ***
 
+= 3.0.6 - 2023-09-18 =
+* Tweak - Payment method text for subscriptions via the PayPal button gateway.
+* Dev - Bump WordPress "tested up to" version to 6.3.
+* Dev - Bump WooCommerce "tested up to" version 7.9.
+* Dev - Bump WooCommerce minimum supported version to 7.7.
+
 = 3.0.5 - 2023-08-29 =
 * Fix - Link to merchant account IDs documentation within the settings pages.
 

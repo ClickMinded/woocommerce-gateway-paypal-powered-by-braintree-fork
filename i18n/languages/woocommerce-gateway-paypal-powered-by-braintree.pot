@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the Braintree for WooCommerce Payment Gateway package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Braintree for WooCommerce Payment Gateway 3.0.5\n"
+"Project-Id-Version: Braintree for WooCommerce Payment Gateway 3.0.6\n"
 "Report-Msgid-Bugs-To: "
 "https://woocommerce.com/my-account/marketplace-ticket-form/\n"
-"POT-Creation-Date: 2023-08-29 22:27:41+00:00\n"
+"POT-Creation-Date: 2023-09-18 01:47:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,52 +13,57 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: class-wc-braintree.php:193
+#: class-wc-braintree.php:120
+#. translators: %s - PayPal email address
+msgid "Via PayPal - %s"
+msgstr ""
+
+#: class-wc-braintree.php:224
 msgid "Connected successfully."
 msgstr ""
 
-#: class-wc-braintree.php:196
+#: class-wc-braintree.php:227
 msgid "There was an error connecting your Braintree account. Please try again."
 msgstr ""
 
-#: class-wc-braintree.php:226
+#: class-wc-braintree.php:257
 msgid "Invalid connection request"
 msgstr ""
 
-#: class-wc-braintree.php:269
+#: class-wc-braintree.php:300
 msgid "Disconnected successfully."
 msgstr ""
 
-#: class-wc-braintree.php:294
+#: class-wc-braintree.php:325
 msgid "Invalid disconnect request"
 msgstr ""
 
-#: class-wc-braintree.php:389
+#: class-wc-braintree.php:420
 msgid ""
 "Heads up! You've enabled advanced fraud tools for Braintree. Please make "
 "sure that advanced fraud tools are also enabled in your Braintree account. "
 "Need help? See the %1$sdocumentation%2$s."
 msgstr ""
 
-#: class-wc-braintree.php:407
+#: class-wc-braintree.php:438
 msgid ""
 "Braintree for WooCommerce is almost ready. To get started, %1$sconnect your "
 "Braintree account%2$s."
 msgstr ""
 
-#: class-wc-braintree.php:419
+#: class-wc-braintree.php:450
 msgid ""
 "Upgrade successful! WooCommerce Braintree deactivated, and Braintree for "
 "WooCommerce has been %1$sconfigured with your previous settings%2$s."
 msgstr ""
 
-#: class-wc-braintree.php:432
+#: class-wc-braintree.php:463
 msgid ""
 "WooCommerce is not being forced over SSL -- Using PayPal with Braintree "
 "requires that checkout to be forced over SSL."
 msgstr ""
 
-#: class-wc-braintree.php:467
+#: class-wc-braintree.php:498
 #. translators: Placeholders: %1$s - payment gateway name tag, %2$s - <a> tag,
 #. %3$s - </a> tag
 msgid ""
@@ -70,11 +75,11 @@ msgstr ""
 msgid "Braintree for WooCommerce Payment Gateway"
 msgstr ""
 
-#: class-wc-braintree.php:571
+#: class-wc-braintree.php:602
 msgid "Configure Credit Card"
 msgstr ""
 
-#: class-wc-braintree.php:571
+#: class-wc-braintree.php:602
 msgid "Configure PayPal"
 msgstr ""
 
