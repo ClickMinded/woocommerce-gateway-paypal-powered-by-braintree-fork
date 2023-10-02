@@ -137,6 +137,10 @@ final class WC_Gateway_Braintree_Credit_Card_Blocks_Support extends WC_Gateway_B
 		$payment_gateways = WC()->payment_gateways->payment_gateways();
 		$gateway          = $payment_gateways[ $this->name ];
 		$card_types       = $gateway->get_card_types();
+		// if the card types is a string, convert it into an array
+    if (is_string($card_types)) {
+				$card_types = [$card_types];
+		}
 		$card_icons       = array();
 
 		foreach ( $card_types as $card_type ) {
