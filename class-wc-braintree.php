@@ -36,7 +36,7 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 
 
 	/** plugin version number */
-	const VERSION = '3.0.6.5'; // WRCS: DEFINED_VERSION.
+	const VERSION = '3.0.6.6'; // WRCS: DEFINED_VERSION.
 
 	/** Braintree JS SDK version  */
 	const BRAINTREE_JS_SDK_VERSION = '3.94.0';
