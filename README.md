@@ -1,10 +1,10 @@
 === Braintree for WooCommerce Payment Gateway ===
 Contributors: automattic, akeda, allendav, royho, slash1andy, woosteve, spraveenitpro, mikedmoore, fernashes, shellbeezy, danieldudzic, dsmithweb, fullysupportedphil, corsonr, zandyring, skyverge
 Tags: ecommerce, e-commerce, commerce, woothemes, wordpress ecommerce, store, sales, sell, shop, shopping, cart, checkout, configurable, paypal, braintree
-Requires at least: 5.8
-Tested up to: 6.2
-Requires PHP: 7.3
-Stable tag: 3.0.2
+Requires at least: 6.2
+Tested up to: 6.4
+Requires PHP: 7.4
+Stable tag: 3.1.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -36,9 +36,9 @@ Braintree for WooCommerce provides several advanced features for transaction pro
 
 = Minimum Requirements =
 
-- PHP 7.3+ (you can see this under <strong>WooCommerce &gt; Status</strong>)</li>
-- WooCommerce 6.8+
-- WordPress 5.8+
+- PHP 7.4+ (you can see this under <strong>WooCommerce &gt; Status</strong>)</li>
+- WooCommerce 8.1+
+- WordPress 6.2+
 - An SSL certificate
 - cURL support (most hosts have this enabled by default)
 
@@ -107,17 +107,66 @@ If not, please get in touch with us through the [plugin forums](https://wordpres
 
 == Changelog ==
 
-= 3.0.2.1 - 2023-06-08 =
-Forked version by ClickMinded
-* Fix - Don't recreate instance when billing address is updated or "update_checkout" event is triggered via AJAX. It will only be recreated if the iframe is removed from the DOM.
-* Fix - Warning about sending a string instead of array in the function get_enabled_card_types() located in includes\payment-forms\class-wc-braintree-hosted-fields-payment-form.php
+= 3.1.2 - 2024-01-22 =
+* Fix - Ensure correct functionality of dynamic descriptor name validation.
+
+= 3.1.1 - 2024-01-09 =
+* Dev - Declare compatibility with Product Editor.
+* Dev - Declare compatibility with WooCommerce Blocks.
+* Dev - Bump WooCommerce "tested up to" version 8.4.
+* Dev - Bump WooCommerce minimum supported version to 8.2.
+* Tweak - Bump PHP "tested up to" version 8.3.
+
+= 3.1.0 - 2023-12-04 =
+* Dev - Update PHPCS and PHPCompatibility GitHub Actions.
+* Tweak - Admin settings colour to match admin theme colour scheme.
+
+= 3.0.9 - 2023-11-20 =
+* Dev - Added critical flows end-to-end tests.
+* Dev - Bump Woocommerce "requires at least" 8.1.
+* Dev - Bump Woocommerce "tested up to" version 8.3.
+* Dev - Bump WordPress "tested up to" version 6.4.
+* Dev - Bump WordPress minimum supported version to 6.2.
+
+= 3.0.8 - 2023-10-30 =
+* Fix - Ensure Braintree block checkout works with FSE themes.
+* Fix - Prevent PHP warnings if no Credit Card logos are displayed.
+
+= 3.0.7 - 2023-10-23 =
+* Dev - Bump WooCommerce "tested up to" version 8.1.
+* Dev - Bump WooCommerce minimum supported version to 7.9.
+* Tweak - Bump `skyverge/wc-plugin-framework` from 5.10.15 to 5.11.8.
+* Tweak - Bump minimum PHP version from 7.3 to 7.4.
+
+= 3.0.6 - 2023-09-18 =
+* Tweak - Payment method text for subscriptions via the PayPal button gateway.
+* Dev - Bump WordPress "tested up to" version to 6.3.
+* Dev - Bump WooCommerce "tested up to" version 7.9.
+* Dev - Bump WooCommerce minimum supported version to 7.7.
+
+= 3.0.5 - 2023-08-29 =
+* Fix - Link to merchant account IDs documentation within the settings pages.
+
+= 3.0.4 - 2023-07-25 =
+* Fix - Check whether wc_get_notices function exists before using it.
+* Dev - Add Playwright end-to-end tests.
+* Dev - Bump Braintree SDK from 3.73.1 to 3.94.0.
+
+= 3.0.3 - 2023-07-05 =
+* Dev - Bump WooCommerce "tested up to" version 7.8.
+* Dev - Bump WooCommerce minimum supported version from 6.8 to 7.2.
+* Dev - Bump WordPress minimum supported version from 5.8 to 6.1.
+* Dev - Ensure translations are properly defined.
+* Dev - Remove deprecated class aliases for framework classes renamed in 2.4.0.
+* Dev - Resolve coding standards issues.
+* Fix - Admin can now save multiple merchant Account IDs.
 
 = 3.0.2 - 2023-05-24 =
 * Add – Support for Cart and Checkout blocks.
-* Dev – Bump WooCommerce minimum supported version from 6.0 to 6.8.  
+* Dev – Bump WooCommerce minimum supported version from 6.0 to 6.8.
 * Dev – Bump WooCommerce “tested up to” version 7.4.
-* Dev – Bump WooCommerce “tested up to” version 7.6.  
-* Dev – Bump WordPress minimum supported version from 5.6 to 5.8.  
+* Dev – Bump WooCommerce “tested up to” version 7.6.
+* Dev – Bump WordPress minimum supported version from 5.6 to 5.8.
 * Dev – Bump WordPress “tested up to” version 6.2.
 
 = 3.0.1 - 2023-04-04 =

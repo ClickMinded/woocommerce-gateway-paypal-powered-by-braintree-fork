@@ -23,7 +23,7 @@
  */
 
 use WC_Braintree\PayPal\Buttons;
-use SkyVerge\WooCommerce\PluginFramework\v5_10_15 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_11_8 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -295,6 +295,7 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 				'black'  => esc_html__( 'Black', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			],
 			'default' => 'gold',
+			'class'   => 'wc-enhanced-select',
 		];
 
 		$form_fields['button_size'] = [
@@ -306,6 +307,7 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 				'responsive' => esc_html__( 'Responsive', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			],
 			'default' => 'responsive',
+			'class'   => 'wc-enhanced-select',
 		];
 
 		$form_fields['button_shape'] = [
@@ -316,6 +318,7 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 				'rect' => _x( 'Rectangle', 'button shape option', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 			],
 			'default' => 'pill',
+			'class'   => 'wc-enhanced-select',
 		];
 
 		if( $this->is_paypal_pay_later_supported() ) {
@@ -339,7 +342,7 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 					'none'        => esc_html__( 'No logo, text only', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				],
 				'default'     => 'inline',
-				'class'       => 'pay-later-field',
+				'class'       => 'pay-later-field wc-enhanced-select',
 			];
 
 			$form_fields['pay_later_messaging_logo_position'] = [
@@ -351,7 +354,7 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 					'top'   => esc_html__( 'Logo above the text', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				],
 				'default'     => 'left',
-				'class'       => 'pay-later-field',
+				'class'       => 'pay-later-field wc-enhanced-select',
 			];
 
 			$form_fields['pay_later_messaging_text_color'] = [
@@ -364,7 +367,7 @@ class WC_Gateway_Braintree_PayPal extends WC_Gateway_Braintree {
 					'grayscale'  => esc_html__( 'Black text with a grayscale logo', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				],
 				'default'     => 'black',
-				'class'       => 'pay-later-field',
+				'class'       => 'pay-later-field wc-enhanced-select',
 			];
 		}
 

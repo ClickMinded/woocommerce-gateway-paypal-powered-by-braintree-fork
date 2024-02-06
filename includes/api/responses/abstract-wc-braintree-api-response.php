@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_10_15 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_11_8 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -36,9 +36,19 @@ defined( 'ABSPATH' ) or exit;
 abstract class WC_Braintree_API_Response implements Framework\SV_WC_API_Response {
 
 
-	/** @var mixed raw response from the Braintree SDK */
+	/**
+	 * Raw response from the Braintree SDK
+	 *
+	 * @var mixed response data from Braintree SDK
+	 */
 	protected $response;
 
+	/**
+	 * Indicates whether the response is from a credit card or PayPal request
+	 *
+	 * @var string either `credit-card` or `paypal`
+	 */
+	protected $response_type;
 
 	/**
 	 * Setup the response

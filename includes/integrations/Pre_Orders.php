@@ -24,7 +24,7 @@
 
 namespace WC_Braintree\Integrations;
 
-use SkyVerge\WooCommerce\PluginFramework\v5_10_15 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_11_8 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -122,16 +122,16 @@ class Pre_Orders extends Framework\SV_WC_Payment_Gateway_Integration_Pre_Orders 
 
 				// if the transaction was held (ie fraud validation failure) mark it as such
 				if ( $response->transaction_held() || ( $this->get_gateway()->supports( Framework\SV_WC_Payment_Gateway::FEATURE_CREDIT_CARD_AUTHORIZATION ) && $this->get_gateway()->perform_credit_card_authorization( $order ) ) ) {
-					
+
 					$status_text = $response->get_status_message();
 					if( $this->get_gateway()->supports(Framework\SV_WC_Payment_Gateway::FEATURE_CREDIT_CARD_AUTHORIZATION ) && $this->get_gateway()->perform_credit_card_authorization( $order )  ) {
 						$status_text = esc_html__( 'Authorization only transaction', 'woocommerce-gateway-paypal-powered-by-braintree' );
 					}
 
-					$this->get_gateway()->mark_order_as_held( 
-						$order, 
+					$this->get_gateway()->mark_order_as_held(
+						$order,
 						$status_text,
-						$response 
+						$response
 					);
 
 					wc_reduce_stock_levels( $order->get_id() );

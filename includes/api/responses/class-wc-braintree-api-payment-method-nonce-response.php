@@ -54,7 +54,7 @@ class WC_Braintree_API_Payment_Method_Nonce_Response extends WC_Braintree_API_Re
 	 *
 	 * @link https://developers.braintreepayments.com/reference/response/payment-method-nonce/php
 	 *
-	 * @since x.x.x
+	 * @since 3.0.4
 	 * @return mixed
 	 */
 	public function get_bin() {

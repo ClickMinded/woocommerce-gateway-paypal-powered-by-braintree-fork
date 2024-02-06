@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_10_15 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_11_8 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -78,6 +78,12 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 	/** @var array shared settings names */
 	protected $shared_settings_names = array( 'public_key', 'private_key', 'merchant_id', 'sandbox_public_key', 'sandbox_private_key', 'sandbox_merchant_id', 'name_dynamic_descriptor' );
 
+	/**
+	 * Braintree API environment
+	 *
+	 * @var \WC_Braintree_Payment_Method_Handler
+	 */
+	protected $auth_environment;
 
 	/**
 	 * WC_Gateway_Braintree constructor.
@@ -267,7 +273,8 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 		}
 
 		// the URL descriptor doesn't have any specific validation, so just truncate it if needed
-		$order->payment->dynamic_descriptors->url = Framework\SV_WC_Helper::str_truncate( $this->get_url_dynamic_descriptor(), 13, '' );
+		$url_dynamic_descriptor                   = empty( $this->get_url_dynamic_descriptor() ) ? '' : $this->get_url_dynamic_descriptor();
+		$order->payment->dynamic_descriptors->url = Framework\SV_WC_Helper::str_truncate( $url_dynamic_descriptor, 13, '' );
 
 		// add the recurring flag to Subscriptions renewal orders
 		if ( $this->get_plugin()->is_subscriptions_active() && wcs_order_contains_subscription( $order, 'any' ) ) {
@@ -950,7 +957,7 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 	 * Filter admin options before saving to dynamically inject valid merchant
 	 * account IDs so they're persisted to settings
 	 *
-	 * @since x.x.x update logic to sanitize multiple merchant account IDs.
+	 * @since 3.0.3 update logic to sanitize multiple merchant account IDs.
 	 * @since 3.3.0
 	 * @param array $sanitized_fields Sanitized fields.
 	 * @return array
@@ -1501,7 +1508,7 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 			default: return false;
 		}
 
-		if ( $product > $product_length ) {
+		if ( strlen( $product ) > $product_length ) {
 			return false;
 		}
 

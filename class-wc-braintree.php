@@ -22,8 +22,8 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_10_15 as Framework;
-use SkyVerge\WooCommerce\PluginFramework\v5_10_15\SV_WC_Payment_Gateway_Payment_Token;
+use SkyVerge\WooCommerce\PluginFramework\v5_11_8 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_11_8\SV_WC_Payment_Gateway_Payment_Token;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -36,7 +36,7 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 
 
 	/** plugin version number */
-	const VERSION = '3.0.6.91'; // WRCS: DEFINED_VERSION.
+	const VERSION = '3.0.5'; // WRCS: DEFINED_VERSION.
 
 	/** Braintree JS SDK version  */
 	const BRAINTREE_JS_SDK_VERSION = '3.94.0';
@@ -70,18 +70,19 @@ class WC_Braintree extends Framework\SV_WC_Payment_Gateway_Plugin {
 			self::PLUGIN_ID,
 			self::VERSION,
 			array(
-				'text_domain' => 'woocommerce-gateway-paypal-powered-by-braintree',
-				'gateways'    => array(
+				'text_domain'   => 'woocommerce-gateway-paypal-powered-by-braintree',
+				'supports_hpos' => true,
+				'gateways'      => array(
 					self::CREDIT_CARD_GATEWAY_ID => self::CREDIT_CARD_GATEWAY_CLASS_NAME,
 					self::PAYPAL_GATEWAY_ID      => self::PAYPAL_GATEWAY_CLASS_NAME,
 				),
-				'require_ssl' => false,
-				'supports'    => array(
+				'require_ssl'   => false,
+				'supports'      => array(
 					self::FEATURE_CAPTURE_CHARGE,
 					self::FEATURE_MY_PAYMENT_METHODS,
 					self::FEATURE_CUSTOMER_ID,
 				),
-				'dependencies' => [
+				'dependencies'  => [
 					'php_extensions' => [ 'curl', 'dom', 'hash', 'openssl', 'SimpleXML', 'xmlwriter' ],
 				],
 			)

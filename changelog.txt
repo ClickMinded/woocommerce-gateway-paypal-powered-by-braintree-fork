@@ -1,5 +1,36 @@
 *** Changelog ***
 
+= 3.1.2 - 2024-01-22 =
+* Fix - Ensure correct functionality of dynamic descriptor name validation.
+
+= 3.1.1 - 2024-01-09 =
+* Dev - Declare compatibility with Product Editor.
+* Dev - Declare compatibility with WooCommerce Blocks.
+* Dev - Bump WooCommerce "tested up to" version 8.4.
+* Dev - Bump WooCommerce minimum supported version to 8.2.
+* Tweak - Bump PHP "tested up to" version 8.3.
+
+= 3.1.0 - 2023-12-11 =
+* Dev - Update PHPCS and PHPCompatibility GitHub Actions.
+* Tweak - Admin settings colour to match admin theme colour scheme.
+
+= 3.0.9 - 2023-11-20 =
+* Dev - Added critical flows end-to-end tests.
+* Dev - Bump Woocommerce "requires at least" 8.1.
+* Dev - Bump Woocommerce "tested up to" version 8.3.
+* Dev - Bump WordPress "tested up to" version 6.4.
+* Dev - Bump WordPress minimum supported version to 6.2.
+
+= 3.0.8 - 2023-10-30 =
+* Fix - Ensure Braintree block checkout works with FSE themes.
+* Fix - Prevent PHP warnings if no Credit Card logos are displayed.
+
+= 3.0.7 - 2023-10-23 =
+* Dev - Bump WooCommerce "tested up to" version 8.1.
+* Dev - Bump WooCommerce minimum supported version to 7.9.
+* Tweak - Bump `skyverge/wc-plugin-framework` from 5.10.15 to 5.11.8.
+* Tweak - Bump minimum PHP version from 7.3 to 7.4.
+
 = 3.0.6 - 2023-09-18 =
 * Tweak - Payment method text for subscriptions via the PayPal button gateway.
 * Dev - Bump WordPress "tested up to" version to 6.3.

@@ -17,7 +17,7 @@ final class WC_Gateway_Braintree_PayPal_Blocks_Support extends WC_Gateway_Braint
 	 */
 	public function __construct() {
 		$this->name       = 'braintree_paypal';
-		$this->asset_path = WC_Braintree::instance()->get_plugin_path() . '/assets/js/blocks/paypal-asset.php';
+		$this->asset_path = WC_Braintree::instance()->get_plugin_path() . '/assets/js/blocks/paypal.asset.php';
 		$this->script_url = WC_Braintree::instance()->get_plugin_url() . '/assets/js/blocks/paypal.js';
 	}
 

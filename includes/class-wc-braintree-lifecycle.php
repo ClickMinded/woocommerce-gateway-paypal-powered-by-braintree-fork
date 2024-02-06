@@ -24,7 +24,7 @@
 
 namespace WC_Braintree;
 
-use SkyVerge\WooCommerce\PluginFramework\v5_10_15 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_11_8 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -200,7 +200,7 @@ class Lifecycle extends Framework\Plugin\Lifecycle {
 
 				$settings['connect_manually'] = 'yes';
 
-				update_option( "woocommerce_${gateway_id}_settings", $settings );
+				update_option( "woocommerce_{$gateway_id}_settings", $settings );
 			}
 		}
 

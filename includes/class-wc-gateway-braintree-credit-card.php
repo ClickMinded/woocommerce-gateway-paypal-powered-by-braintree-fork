@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_10_15 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_11_8 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -217,7 +217,7 @@ class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 			'fraud_tool'           => array(
 				'title'       => esc_html__( 'Fraud Tool', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'type'        => 'select',
-				'class'       => 'js-fraud-tool',
+				'class'       => 'js-fraud-tool wc-enhanced-select',
 				'desc_tip'    => esc_html__( 'Select the fraud tool you want to use. Basic is enabled by default and requires no additional configuration. Advanced requires you to enable advanced fraud tools in your Braintree control panel. To use Kount Direct you must contact Braintree support.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				/* translators: Placeholders %1$s - opening HTML <a> link tag, closing HTML </a> link tag */
 				'description' => sprintf( esc_html__( 'Read more details on fraud and verification tools in the extension %1$sdocumentation%2$s.', 'woocommerce-gateway-paypal-powered-by-braintree' ), '<a href="' . esc_url( $this->get_plugin()->get_documentation_url() ) . '#fraud-and-verification-tools">', '</a>' ),
@@ -266,6 +266,7 @@ class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 			'threed_secure_mode' => array(
 				'title'       => esc_html__( 'Level', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'type'        => 'select',
+				'class'       => 'wc-enhanced-select',
 				'label'       => esc_html__( 'Only accept payments when the liability is shifted', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'default'     => self::THREED_SECURE_MODE_STANDARD,
 				'options'     => array(
@@ -889,7 +890,7 @@ class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 	 *
 	 * @link https://developers.braintreepayments.com/guides/3d-secure/server-side/php#vaulted-credit-card-nonces
 	 *
-	 * @since x.x.x
+	 * @since 3.0.4
 	 *
 	 * @param \WC_Braintree_Payment_Method $token payment method.
 	 * @return array 3d secure nonce and bin data

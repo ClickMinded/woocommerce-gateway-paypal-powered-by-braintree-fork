@@ -3,18 +3,19 @@
  * Plugin Name: Braintree for WooCommerce Payment Gateway
  * Plugin URI: https://docs.woocommerce.com/document/woocommerce-gateway-paypal-powered-by-braintree/
  * Documentation URI: https://docs.woocommerce.com/document/woocommerce-gateway-paypal-powered-by-braintree/
- * Description: <code><strong>[Forked version by ClickMinded - resolved issue about payment fields being cleared]</strong></code> Receive credit card or PayPal payments using Braintree for WooCommerce.  A server with cURL, SSL support, and a valid SSL certificate is required (for security reasons) for this gateway to function. Requires PHP 7.3+
+ * Description: <code><strong>[Forked version by ClickMinded - resolved issue about payment fields being cleared]</strong></code>  Receive credit card or PayPal payments using Braintree for WooCommerce.  A server with cURL, SSL support, and a valid SSL certificate is required (for security reasons) for this gateway to function. Requires PHP 7.4+
  * Author: WooCommerce
  * Author URI: http://woocommerce.com/
- * Version: 3.0.6.91
+ * Version: 3.1.2
  * Text Domain: woocommerce-gateway-paypal-powered-by-braintree
  * Domain Path: /i18n/languages/
  *
- * Requires at least: 6.1
- * Tested up to: 6.3
- * Requires PHP: 7.3
- * WC requires at least: 7.7
- * WC tested up to: 7.9
+ * Requires at least: 6.2
+ * Tested up to: 6.4
+ * WC requires at least: 8.2
+ * WC tested up to: 8.4
+ * Requires PHP: 7.4
+ * PHP tested up to: 8.3
  *
  * Copyright (c) 2016-2020, Automattic, Inc.
  *
@@ -37,7 +38,7 @@ defined( 'ABSPATH' ) or exit;
 /**
  * Required minimums
  */
-define( 'WC_PAYPAL_BRAINTREE_MIN_PHP_VER', '7.3.0' );
+define( 'WC_PAYPAL_BRAINTREE_MIN_PHP_VER', '7.4.0' );
 
 /**
  * Base plugin file
@@ -53,16 +54,16 @@ class WC_PayPal_Braintree_Loader {
 
 
 	/** minimum PHP version required by this plugin */
-	const MINIMUM_PHP_VERSION = '7.3';
+	const MINIMUM_PHP_VERSION = '7.4';
 
 	/** minimum WordPress version required by this plugin */
-	const MINIMUM_WP_VERSION = '5.8';
+	const MINIMUM_WP_VERSION = '6.2';
 
 	/** minimum WooCommerce version required by this plugin */
-	const MINIMUM_WC_VERSION = '6.8';
+	const MINIMUM_WC_VERSION = '8.2';
 
 	/** SkyVerge plugin framework version used by this plugin */
-	const FRAMEWORK_VERSION = '5.10.7';
+	const FRAMEWORK_VERSION = '5.11.8';
 
 	/** the plugin name, for displaying notices */
 	const PLUGIN_NAME = 'Braintree for WooCommerce';
@@ -99,13 +100,40 @@ class WC_PayPal_Braintree_Loader {
 		// Show delete user warning.
 		add_action( 'admin_notices', array( $this, 'delete_user_warning' ) );
 
-		// Declare compatibility with High-Performance Order Storage.
-		add_action( 'before_woocommerce_init', array( $this, 'declare_hpos_compatibility' ) );
+		// Declare compatibility with Woocommerce features.
+		add_action( 'before_woocommerce_init', array( $this, 'declare_woocommerce_feature_compatibility' ) );
 
 		// Add support for WooCommerce Blocks.
 		add_action( 'woocommerce_blocks_loaded', array( $this, 'woocommerce_block_support' ) );
+
+		// Filter credit card settings to ensure validity of card_types.
+		add_filter( 'option_woocommerce_braintree_credit_card_settings', array( $this, 'ensure_card_types_is_an_array' ) );
 	}
 
+	/**
+	 * Filter for the woocommerce_braintree_credit_card_settings option.
+	 *
+	 * Checks the card_types value of the option to ensure it is an array.
+	 * If the value isn't set, it's converted to an empty array. If a non-array
+	 * type is returned, it's converted to an array with the value as the only
+	 * element.
+	 *
+	 * The card_types value is passed through a number of array_*() functions which
+	 * throw warnings if the value isn't an array.
+	 *
+	 * @since 3.0.6
+	 *
+	 * @param mixed $option_value The option value as stored in WordPress.
+	 * @return mixed The modified option value.
+	 */
+	public function ensure_card_types_is_an_array( $option_value ) {
+		if ( empty( $option_value['card_types'] ) ) {
+			$option_value['card_types'] = array();
+		} elseif ( ! is_array( $option_value['card_types'] ) ) {
+			$option_value['card_types'] = array( $option_value['card_types'] );
+		}
+		return $option_value;
+	}
 
 	/**
 	 * Cloning instances is forbidden due to singleton pattern.
@@ -532,13 +560,26 @@ class WC_PayPal_Braintree_Loader {
 	}
 
 	/**
-	 * Declare compatibility with High-Performance Order Storage.
+	 * Declare compatibility with Woocommerce features.
 	 *
+	 * List of feature -
+	 *   1. High-Performance Order Storage
+	 *   2. Product block editor
+	 *
+	 * @since 3.1.1 Rename function.
 	 * @since 3.0.0
 	 */
-	public function declare_hpos_compatibility() {
+	public function declare_woocommerce_feature_compatibility() {
 		if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
-			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
+				'custom_order_tables',
+				__FILE__
+			);
+
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
+				'product_block_editor',
+				__FILE__
+			);
 		}
 	}
 
@@ -563,11 +604,5 @@ class WC_PayPal_Braintree_Loader {
 		}
 	}
 }
-
-add_filter('site_transient_update_plugins', 'remove_update_notification');
-function remove_update_notification($value) {
-     unset($value->response[ plugin_basename(__FILE__) ]);
-     return $value;
-} 
 
 WC_PayPal_Braintree_Loader::instance();

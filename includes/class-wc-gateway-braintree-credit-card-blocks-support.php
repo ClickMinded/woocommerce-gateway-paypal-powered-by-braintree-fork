@@ -5,7 +5,7 @@
  * @package WC-Braintree/Gateway/Blocks-Support
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_10_15 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_11_8 as Framework;
 
 /**
  * Braintree CreditCard payment method Blocks integration
@@ -19,7 +19,7 @@ final class WC_Gateway_Braintree_Credit_Card_Blocks_Support extends WC_Gateway_B
 	 */
 	public function __construct() {
 		$this->name       = 'braintree_credit_card';
-		$this->asset_path = WC_Braintree::instance()->get_plugin_path() . '/assets/js/blocks/credit-card-asset.php';
+		$this->asset_path = WC_Braintree::instance()->get_plugin_path() . '/assets/js/blocks/credit-card.asset.php';
 		$this->script_url = WC_Braintree::instance()->get_plugin_url() . '/assets/js/blocks/credit-card.js';
 
 		// Get the saved token 3DS nonce via AJAX.
@@ -137,10 +137,6 @@ final class WC_Gateway_Braintree_Credit_Card_Blocks_Support extends WC_Gateway_B
 		$payment_gateways = WC()->payment_gateways->payment_gateways();
 		$gateway          = $payment_gateways[ $this->name ];
 		$card_types       = $gateway->get_card_types();
-		// if the card types is a string, convert it into an array
-    if (is_string($card_types)) {
-				$card_types = [$card_types];
-		}
 		$card_icons       = array();
 
 		foreach ( $card_types as $card_type ) {
