@@ -3,17 +3,17 @@
  * Plugin Name: Braintree for WooCommerce Payment Gateway
  * Plugin URI: https://docs.woocommerce.com/document/woocommerce-gateway-paypal-powered-by-braintree/
  * Documentation URI: https://docs.woocommerce.com/document/woocommerce-gateway-paypal-powered-by-braintree/
- * Description: <code><strong>[Forked version by ClickMinded - resolved issue about payment fields being cleared]</strong></code>  Receive credit card or PayPal payments using Braintree for WooCommerce.  A server with cURL, SSL support, and a valid SSL certificate is required (for security reasons) for this gateway to function. Requires PHP 7.4+
+ * Description: <code><strong>[Forked version by ClickMinded - resolved issue about payment fields being cleared]</strong></code> Receive credit card or PayPal payments using Braintree for WooCommerce.  A server with cURL, SSL support, and a valid SSL certificate is required (for security reasons) for this gateway to function. Requires PHP 7.4+
  * Author: WooCommerce
  * Author URI: http://woocommerce.com/
- * Version: 3.1.2
+ * Version: 3.1.3
  * Text Domain: woocommerce-gateway-paypal-powered-by-braintree
  * Domain Path: /i18n/languages/
  *
- * Requires at least: 6.2
+ * Requires at least: 6.3
  * Tested up to: 6.4
- * WC requires at least: 8.2
- * WC tested up to: 8.4
+ * WC requires at least: 8.3
+ * WC tested up to: 8.5
  * Requires PHP: 7.4
  * PHP tested up to: 8.3
  *
@@ -601,6 +601,28 @@ class WC_PayPal_Braintree_Loader {
 					$payment_method_registry->register( new WC_Gateway_Braintree_Credit_Card_Blocks_Support() );
 				}
 			);
+
+			// Register payment requirements for Braintree PayPal Checkout Confirmation.
+			if ( function_exists( 'woocommerce_store_api_register_payment_requirements' ) ) {
+				woocommerce_store_api_register_payment_requirements(
+					array(
+						'data_callback' => function () {
+							$payment_gateways = WC()->payment_gateways->payment_gateways();
+							$gateway          = $payment_gateways['braintree_paypal'];
+							if ( ! $gateway ) {
+								return array();
+							}
+
+							$payment_form = $gateway->get_payment_form_instance();
+							if ( $gateway->is_available() && $payment_form && $payment_form->get_cart_nonce() ) {
+								return array( 'braintree_paypal_checkout_confirmation' );
+							}
+
+							return array();
+						},
+					)
+				);
+			}
 		}
 	}
 }

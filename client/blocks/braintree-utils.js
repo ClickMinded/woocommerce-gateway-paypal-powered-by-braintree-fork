@@ -27,3 +27,42 @@ export const getClientToken = (ajaxUrl, paymentMethodId, nonce) => {
 			}
 		});
 };
+
+/**
+ * Set PayPal Payment nonce to server.
+ *
+ * @param {string} cartHandlerUrl  The Cart Handler URL.
+ * @param {string} payload         The payload to send to server.
+ */
+export const setPaymentNonceSession = (cartHandlerUrl, payload) => {
+	if (!payload || !payload.nonce) {
+		return;
+	}
+
+	return fetch(cartHandlerUrl, {
+		method: 'POST',
+		body: jsonToFormData(payload),
+	}).then((response) => response.json());
+};
+
+/**
+ * Convert JSON to FormData.
+ *
+ * @param {Object}   json
+ * @param {FormData} form
+ * @param {string}   namespace
+ * @return {FormData} FormData object.
+ */
+function jsonToFormData(json, form, namespace) {
+	const formData = form || new FormData();
+	for (const property in json) {
+		if (!json.hasOwnProperty(property) || !json[property]) continue;
+		const formKey = namespace ? `${namespace}[${property}]` : property;
+		if (typeof json[property] === 'object') {
+			jsonToFormData(json[property], formData, formKey);
+		} else {
+			formData.append(formKey, json[property]);
+		}
+	}
+	return formData;
+}

@@ -169,7 +169,7 @@ abstract class Abstract_Button extends Framework\Handlers\Script_Handler {
 		WC()->session->set( 'wc_braintree_paypal_cart_nonce', Framework\SV_WC_Helper::get_posted_value( 'nonce' ) );
 
 		if ( ! empty( $_POST['details'] ) ) {
-			$this->set_customer_data( sanitize_text_field( wp_unslash( $_POST['details'] ) ) );
+			$this->set_customer_data( wc_clean( wp_unslash( $_POST['details'] ) ) );
 		}
 
 		wp_send_json(
@@ -602,7 +602,7 @@ abstract class Abstract_Button extends Framework\Handlers\Script_Handler {
 			'countryCode' => '',
 		];
 
-		if ( isset( $data['billingAddress'] ) && ! empty( $data['billingAddress'] ) ) {
+		if ( isset( $data['billingAddress'] ) && ! empty( $data['billingAddress'] ) && ! empty( $data['billingAddress']['line1'] ) ) {
 			$billing_address = wp_parse_args( $data['billingAddress'], $address_defaults );
 		} else {
 			$billing_address = wp_parse_args( $data['shippingAddress'], $address_defaults );

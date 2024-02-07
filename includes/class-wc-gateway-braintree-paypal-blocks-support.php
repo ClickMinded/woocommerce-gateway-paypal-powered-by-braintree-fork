@@ -46,26 +46,33 @@ final class WC_Gateway_Braintree_PayPal_Blocks_Support extends WC_Gateway_Braint
 	 * @return array
 	 */
 	public function get_payment_method_data() {
-		$params           = array();
-		$payment_gateways = WC()->payment_gateways->payment_gateways();
-		$gateway          = $payment_gateways[ $this->name ];
-		$payment_form     = $this->get_payment_form_instance();
+		$params                   = array();
+		$payment_gateways         = WC()->payment_gateways->payment_gateways();
+		$gateway                  = $payment_gateways[ $this->name ];
+		$payment_form             = $this->get_payment_form_instance();
+		$is_checkout_confirmation = false;
 		if ( $payment_form ) {
-			$params = $payment_form->get_payment_form_handler_js_params();
+			$params                   = $payment_form->get_payment_form_handler_js_params();
+			$is_checkout_confirmation = $payment_form->is_checkout_confirmation();
 		}
 
 		return array_merge(
 			parent::get_payment_method_data(),
 			$params,
 			array(
-				'logo_url'                => 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_100x26.png',
-				'client_token_nonce'      => wp_create_nonce( 'wc_' . $this->name . '_get_client_token' ),
-				'paypal_locale'           => $gateway->get_safe_locale(),
-				'button_width'            => $gateway->get_button_width( $gateway->get_button_size() ),
-				'debug'                   => $gateway->debug_log(),
-				'messaging_logo_type'     => $gateway->get_pay_later_messaging_logo_type(),
-				'messaging_logo_position' => $gateway->get_pay_later_messaging_logo_postion(),
-				'messaging_text_color'    => $gateway->get_pay_later_messaging_text_color(),
+				'logo_url'                 => 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_100x26.png',
+				'client_token_nonce'       => wp_create_nonce( 'wc_' . $this->name . '_get_client_token' ),
+				'set_payment_method_nonce' => wp_create_nonce( 'wc_' . $this->name . '_cart_set_payment_method' ),
+				'paypal_locale'            => $gateway->get_safe_locale(),
+				'button_width'             => $gateway->get_button_width( $gateway->get_button_size() ),
+				'debug'                    => $gateway->debug_log(),
+				'messaging_logo_type'      => $gateway->get_pay_later_messaging_logo_type(),
+				'messaging_logo_position'  => $gateway->get_pay_later_messaging_logo_postion(),
+				'messaging_text_color'     => $gateway->get_pay_later_messaging_text_color(),
+				'is_checkout_confirmation' => $is_checkout_confirmation,
+				'paypal_customer_details'  => WC()->session ? WC()->session->get( 'wc_braintree_paypal_cart_customer_details', array() ) : array(),
+				'cart_checkout_enabled'    => is_cart() && $gateway->cart_checkout_enabled(),
+				'cart_handler_url'         => add_query_arg( 'wc-api', get_class( $gateway ), home_url() ),
 			),
 		);
 	}
@@ -80,6 +87,16 @@ final class WC_Gateway_Braintree_PayPal_Blocks_Support extends WC_Gateway_Braint
 	public function add_braintree_paypal_saved_payment_methods( $saved_methods, $customer_id ) {
 		$payment_gateways = WC()->payment_gateways->payment_gateways();
 		$tokens           = $payment_gateways[ $this->name ]->get_payment_tokens_handler()->get_tokens( $customer_id );
+		$payment_form     = $this->get_payment_form_instance();
+
+		if ( $payment_form ) {
+			// Check if we are on the checkout confirmation page and if so, don't show saved payment methods.
+			$is_checkout_confirmation = $payment_form->is_checkout_confirmation();
+			if ( $is_checkout_confirmation ) {
+				$saved_methods['braintree_paypal'] = array();
+				return $saved_methods;
+			}
+		}
 
 		if ( ! $tokens ) {
 			$tokens = array();

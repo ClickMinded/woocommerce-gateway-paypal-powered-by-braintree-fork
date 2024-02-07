@@ -8,7 +8,7 @@ import { useCallback, useMemo, useState } from '@wordpress/element';
  */
 import { PAYMENT_METHOD_ID, PAYMENT_METHOD_NAME } from './constants';
 import { getBraintreePayPalServerData, logData } from './utils';
-import { getClientToken } from '../braintree-utils';
+import { getClientToken, setPaymentNonceSession } from '../braintree-utils';
 
 const {
 	ajaxUrl,
@@ -22,6 +22,10 @@ const {
 	tokenizationForced,
 	paypalLocale,
 	forceBuyerCountry,
+	cartPaymentNonce,
+	cartHandlerUrl,
+	setPaymentMethodNonce,
+	paymentErrorMessage,
 } = getBraintreePayPalServerData();
 
 /**
@@ -34,6 +38,8 @@ const {
  * @param {Function} props.onSubmit          Function to submit payment form.
  * @param {boolean}  props.shouldSavePayment Whether or not the payment method should be saved.
  * @param {string}   props.token             Saved payment token.
+ * @param {boolean}  props.isExpress         Whether or not we're in express checkout.
+ * @param {boolean}  props.needsShipping     Whether or not the order needs shipping.
  *
  * @return {Object} An object with properties that interact with the Payment Form.
  */
@@ -42,8 +48,10 @@ export const usePaymentForm = ({
 	onSubmit,
 	shouldSavePayment,
 	token = null,
+	isExpress = false,
+	needsShipping = false,
 }) => {
-	const [paymentNonce, setPaymentNonce] = useState('');
+	const [paymentNonce, setPaymentNonce] = useState(cartPaymentNonce || '');
 	const [deviceData, setDeviceData] = useState('');
 	const [testAmount, setTestAmount] = useState('');
 
@@ -54,11 +62,16 @@ export const usePaymentForm = ({
 		return !shouldSavePayment && !tokenizationForced;
 	}, [shouldSavePayment]);
 
+	// If we're in express checkout, use the 'checkout' label.
+	if (isExpress) {
+		buttonStyles.label = 'checkout';
+	}
+
 	const renderPayPalButtons = useCallback(
 		(paypalCheckoutInstance, containerId) => {
 			const options = {
 				env: isTestEnvironment ? 'sandbox' : 'production',
-				commit: true,
+				commit: isExpress ? false : true,
 				style: buttonStyles,
 				// eslint-disable-next-line no-unused-vars
 				onApprove(data, actions) {
@@ -66,6 +79,34 @@ export const usePaymentForm = ({
 						.tokenizePayment(data)
 						.then(function (payload) {
 							logData('Payment tokenized.', payload);
+							// If we're in express checkout, send the nonce to the server.
+							if (isExpress) {
+								// Send the nonce to the server.
+								if (payload) {
+									payload.wp_nonce = setPaymentMethodNonce;
+									return setPaymentNonceSession(
+										cartHandlerUrl,
+										payload
+									)
+										.then((res) => {
+											if (res && res.redirect_url) {
+												window.location =
+													res.redirect_url;
+												return;
+											}
+											throw new Error(
+												paymentErrorMessage
+											);
+										})
+										.catch((error) => {
+											setPaymentNonce('');
+											logData(
+												`Payment Error: ${error.message}`,
+												error
+											);
+										});
+								}
+							}
 							setPaymentNonce(payload.nonce);
 							// Place an Order.
 							onSubmit();
@@ -84,6 +125,7 @@ export const usePaymentForm = ({
 					amount,
 					currency: currencyCode,
 					locale: paypalLocale,
+					enableShippingAddress: needsShipping,
 				});
 			};
 
@@ -104,7 +146,7 @@ export const usePaymentForm = ({
 				return paypal.Buttons(options).render(`#${containerId}`);
 			}
 		},
-		[amount, currencyCode, isSingleUse, onSubmit]
+		[amount, currencyCode, isExpress, isSingleUse, needsShipping, onSubmit]
 	);
 
 	/**
@@ -132,7 +174,7 @@ export const usePaymentForm = ({
 			currency: currencyCode,
 			intent: isSingleUse ? payPalIntent : 'tokenize',
 			vault: isSingleUse ? false : true,
-			commit: true,
+			commit: isExpress ? false : true,
 		};
 
 		if (enabledFunding.length) {
@@ -147,7 +189,7 @@ export const usePaymentForm = ({
 			options['buyer-country'] = forceBuyerCountry;
 		}
 		return options;
-	}, [currencyCode, isSingleUse]);
+	}, [currencyCode, isSingleUse, isExpress]);
 
 	const loadPayPalSDK = useCallback(
 		async (containerId = '', mounted = {}) => {

@@ -1,10 +1,10 @@
 === Braintree for WooCommerce Payment Gateway ===
 Contributors: automattic, akeda, allendav, royho, slash1andy, woosteve, spraveenitpro, mikedmoore, fernashes, shellbeezy, danieldudzic, dsmithweb, fullysupportedphil, corsonr, zandyring, skyverge
 Tags: ecommerce, e-commerce, commerce, woothemes, wordpress ecommerce, store, sales, sell, shop, shopping, cart, checkout, configurable, paypal, braintree
-Requires at least: 6.2
+Requires at least: 6.3
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 3.1.2
+Stable tag: 3.1.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -106,6 +106,12 @@ If not, please get in touch with us through the [plugin forums](https://wordpres
 6. Checkout with PayPal directly from the product page
 
 == Changelog ==
+
+= 3.1.3 - 2024-02-05 =
+* Add - Cart and Checkout block support for PayPal Express Checkout.
+* Dev - Bump WooCommerce "tested up to" version 8.5.
+* Dev - Bump WooCommerce minimum supported version to 8.3.
+* Dev - Bump WordPress minimum supported version to 6.3.
 
 = 3.1.2 - 2024-01-22 =
 * Fix - Ensure correct functionality of dynamic descriptor name validation.

@@ -26,11 +26,16 @@ export const getBraintreePayPalServerData = () => {
 		);
 	}
 
+	const isCheckoutConfirmation =
+		braintreePayPalData.is_checkout_confirmation || false;
+
 	cachedPayPalServerData = {
 		ajaxUrl: braintreePayPalData.ajax_url || '',
 		buttonStyles: braintreePayPalData.button_styles || {},
 		buttonWidth: braintreePayPalData.button_width || null,
 		clientTokenNonce: braintreePayPalData.client_token_nonce || '',
+		setPaymentMethodNonce:
+			braintreePayPalData.set_payment_method_nonce || '',
 		debug: braintreePayPalData.debug || false,
 		description: braintreePayPalData.description || '',
 		forceBuyerCountry: braintreePayPalData.force_buyer_country || '',
@@ -52,11 +57,22 @@ export const getBraintreePayPalServerData = () => {
 			braintreePayPalData.paypal_disabled_funding_options || [],
 		payPalIntent: braintreePayPalData.paypal_intent || '',
 		paypalLocale: braintreePayPalData.paypal_locale || 'en_us',
-		showSavedCards: braintreePayPalData.show_saved_cards || false,
-		showSaveOption: braintreePayPalData.show_save_option || false,
+		showSavedCards:
+			(braintreePayPalData.show_saved_cards && !isCheckoutConfirmation) ||
+			false,
+		showSaveOption:
+			(braintreePayPalData.show_save_option && !isCheckoutConfirmation) ||
+			false,
 		supports: braintreePayPalData.supports || {},
 		title: braintreePayPalData.title || '',
 		tokenizationForced: braintreePayPalData.tokenization_forced || false,
+		isCheckoutConfirmation:
+			braintreePayPalData.is_checkout_confirmation || false,
+		payPalCustomerDetails:
+			braintreePayPalData.paypal_customer_details || {},
+		cartPaymentNonce: braintreePayPalData.cart_payment_nonce || '',
+		cartHandlerUrl: braintreePayPalData.cart_handler_url || '',
+		cartCheckoutEnabled: braintreePayPalData.cart_checkout_enabled || false,
 	};
 
 	return cachedPayPalServerData;
