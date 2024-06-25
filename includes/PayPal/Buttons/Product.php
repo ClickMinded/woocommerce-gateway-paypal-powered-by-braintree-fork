@@ -24,7 +24,7 @@
 
 namespace WC_Braintree\PayPal\Buttons;
 
-use SkyVerge\WooCommerce\PluginFramework\v5_11_8 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_0 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -99,7 +99,7 @@ class Product extends Abstract_Button {
 			return;
 		}
 
-		add_action( 'woocommerce_before_add_to_cart_button', [ $this, 'render' ] );
+		add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'render' ) );
 	}
 
 

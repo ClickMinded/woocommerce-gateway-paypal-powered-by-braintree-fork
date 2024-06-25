@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_11_8 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_0 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -1655,5 +1655,22 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 			}
 		}
 		return $result;
+	}
+
+	/**
+	 * Mark an order as refunded. This should only be used when the full order
+	 * amount has been refunded.
+	 *
+	 * @since 3.1.5
+	 *
+	 * @param \WC_Order $order order object.
+	 */
+	public function mark_order_as_refunded( $order ) {
+
+		/* translators: Placeholders: %s - payment gateway title (such as Authorize.net, Braintree, etc) */
+		$order_note = sprintf( esc_html__( '%s Order completely refunded.', 'woocommerce-gateway-paypal-powered-by-braintree' ), $this->get_method_title() );
+
+		// Add order note and continue with WC refund process.
+		$order->add_order_note( $order_note );
 	}
 }

@@ -23,7 +23,7 @@
  */
 
 use WC_Braintree\PayPal\Buttons;
-use SkyVerge\WooCommerce\PluginFramework\v5_11_8 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_0 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 

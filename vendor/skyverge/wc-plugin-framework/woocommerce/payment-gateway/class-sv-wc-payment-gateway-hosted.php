@@ -22,11 +22,11 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-namespace SkyVerge\WooCommerce\PluginFramework\v5_11_8;
+namespace SkyVerge\WooCommerce\PluginFramework\v5_12_0;
 
 defined( 'ABSPATH' ) or exit;
 
-if ( ! class_exists( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_11_8\\SV_WC_Payment_Gateway_Hosted' ) ) :
+if ( ! class_exists( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_12_0\\SV_WC_Payment_Gateway_Hosted' ) ) :
 
 
 /**
@@ -406,6 +406,17 @@ abstract class SV_WC_Payment_Gateway_Hosted extends SV_WC_Payment_Gateway {
 			// Handle the order based on the response
 			$this->process_transaction_response( $order, $response );
 
+			/**
+			 * Allow plugins to hook into the transaction response.
+			 *
+			 * @since 5.12.0
+			 *
+			 * @param \WC_Order $order
+			 * @param SV_WC_Payment_Gateway_API_Payment_Notification_Response $response
+			 * @param SV_WC_Payment_Gateway_Hosted $gateway
+			 */
+			do_action( 'wc_payment_gateway_' . $this->get_id() . '_transaction_response', $order, $response, $this );
+
 		} catch ( SV_WC_Payment_Gateway_Exception $e ) {
 
 			if ( $order && $order->needs_payment() ) {
@@ -513,6 +524,7 @@ abstract class SV_WC_Payment_Gateway_Hosted extends SV_WC_Payment_Gateway {
 			$order->add_order_note( sprintf( esc_html__( '%s duplicate transaction received', 'woocommerce-plugin-framework' ), $this->get_method_title() ) );
 
 			throw new SV_WC_Payment_Gateway_Exception( sprintf(
+				/* translators: Placeholder: %s - Order number */
 				__( 'Order %s is already paid for.', 'woocommerce-plugin-framework' ),
 				$order->get_order_number()
 			) );

@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the Braintree for WooCommerce Payment Gateway package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Braintree for WooCommerce Payment Gateway 3.1.3\n"
+"Project-Id-Version: Braintree for WooCommerce Payment Gateway 3.1.6\n"
 "Report-Msgid-Bugs-To: "
 "https://woocommerce.com/my-account/marketplace-ticket-form/\n"
-"POT-Creation-Date: 2024-02-05 14:45:59+00:00\n"
+"POT-Creation-Date: 2024-05-20 14:25:53+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,57 +13,57 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: class-wc-braintree.php:121
+#: class-wc-braintree.php:127
 #. translators: %s - PayPal email address
 msgid "Via PayPal - %s"
 msgstr ""
 
-#: class-wc-braintree.php:225
+#: class-wc-braintree.php:231
 msgid "Connected successfully."
 msgstr ""
 
-#: class-wc-braintree.php:228
+#: class-wc-braintree.php:234
 msgid "There was an error connecting your Braintree account. Please try again."
 msgstr ""
 
-#: class-wc-braintree.php:258
+#: class-wc-braintree.php:264
 msgid "Invalid connection request"
 msgstr ""
 
-#: class-wc-braintree.php:301
+#: class-wc-braintree.php:307
 msgid "Disconnected successfully."
 msgstr ""
 
-#: class-wc-braintree.php:326
+#: class-wc-braintree.php:332
 msgid "Invalid disconnect request"
 msgstr ""
 
-#: class-wc-braintree.php:421
+#: class-wc-braintree.php:427
 msgid ""
 "Heads up! You've enabled advanced fraud tools for Braintree. Please make "
 "sure that advanced fraud tools are also enabled in your Braintree account. "
 "Need help? See the %1$sdocumentation%2$s."
 msgstr ""
 
-#: class-wc-braintree.php:439
+#: class-wc-braintree.php:445
 msgid ""
 "Braintree for WooCommerce is almost ready. To get started, %1$sconnect your "
 "Braintree account%2$s."
 msgstr ""
 
-#: class-wc-braintree.php:451
+#: class-wc-braintree.php:457
 msgid ""
 "Upgrade successful! WooCommerce Braintree deactivated, and Braintree for "
 "WooCommerce has been %1$sconfigured with your previous settings%2$s."
 msgstr ""
 
-#: class-wc-braintree.php:464
+#: class-wc-braintree.php:470
 msgid ""
 "WooCommerce is not being forced over SSL -- Using PayPal with Braintree "
 "requires that checkout to be forced over SSL."
 msgstr ""
 
-#: class-wc-braintree.php:499
+#: class-wc-braintree.php:505
 #. translators: Placeholders: %1$s - payment gateway name tag, %2$s - <a> tag,
 #. %3$s - </a> tag
 msgid ""
@@ -75,11 +75,11 @@ msgstr ""
 msgid "Braintree for WooCommerce Payment Gateway"
 msgstr ""
 
-#: class-wc-braintree.php:603
+#: class-wc-braintree.php:609
 msgid "Configure Credit Card"
 msgstr ""
 
-#: class-wc-braintree.php:603
+#: class-wc-braintree.php:609
 msgid "Configure PayPal"
 msgstr ""
 
@@ -183,45 +183,45 @@ msgid ""
 "your transaction."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:77
+#: includes/class-wc-gateway-braintree-credit-card.php:78
 msgid "Braintree (Credit Card)"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:78
+#: includes/class-wc-gateway-braintree-credit-card.php:79
 msgid "Allow customers to securely pay using their credit card via Braintree."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:169
+#: includes/class-wc-gateway-braintree-credit-card.php:170
 msgid "First name contains unsupported characters"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:170
+#: includes/class-wc-gateway-braintree-credit-card.php:171
 msgid "Last name contains unsupported characters"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:201
+#: includes/class-wc-gateway-braintree-credit-card.php:202
 msgid "Basic"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:202
+#: includes/class-wc-gateway-braintree-credit-card.php:203
 msgid ""
 "Advanced (must also enable advanced fraud tools in your Braintree control "
 "panel)"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:207
+#: includes/class-wc-gateway-braintree-credit-card.php:208
 msgid "Kount Direct (need to contact Braintree support to activate this)"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:214
+#: includes/class-wc-gateway-braintree-credit-card.php:215
 msgid "Fraud Settings"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:218
+#: includes/class-wc-gateway-braintree-credit-card.php:219
 msgid "Fraud Tool"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:221
+#: includes/class-wc-gateway-braintree-credit-card.php:222
 msgid ""
 "Select the fraud tool you want to use. Basic is enabled by default and "
 "requires no additional configuration. Advanced requires you to enable "
@@ -229,7 +229,7 @@ msgid ""
 "you must contact Braintree support."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:223
+#: includes/class-wc-gateway-braintree-credit-card.php:224
 #. translators: Placeholders %1$s - opening HTML <a> link tag, closing HTML
 #. </a> link tag
 msgid ""
@@ -237,65 +237,65 @@ msgid ""
 "%1$sdocumentation%2$s."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:227
+#: includes/class-wc-gateway-braintree-credit-card.php:228
 msgid "Kount merchant ID"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:230
+#: includes/class-wc-gateway-braintree-credit-card.php:231
 msgid "Speak with your account management team at Braintree to get this."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:262
+#: includes/class-wc-gateway-braintree-credit-card.php:263
 msgid "3D Secure"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:264
+#: includes/class-wc-gateway-braintree-credit-card.php:265
 msgid ""
 "3D Secure benefits cardholders and merchants by providing an additional "
 "layer of verification using Verified by Visa, MasterCard SecureCode, and "
 "American Express SafeKey. %1$sLearn more about 3D Secure%2$s."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:267
+#: includes/class-wc-gateway-braintree-credit-card.php:268
 msgid "Level"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:270
+#: includes/class-wc-gateway-braintree-credit-card.php:271
 msgid "Only accept payments when the liability is shifted"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:273
+#: includes/class-wc-gateway-braintree-credit-card.php:274
 msgid "Standard"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:274
+#: includes/class-wc-gateway-braintree-credit-card.php:275
 msgid "Strict"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:278
+#: includes/class-wc-gateway-braintree-credit-card.php:279
 msgid "Supported Card Types"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:281
+#: includes/class-wc-gateway-braintree-credit-card.php:282
 msgid "3D Secure validation will only occur for these cards."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:303
+#: includes/class-wc-gateway-braintree-credit-card.php:304
 msgid "Card Verification (CSC)"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:304
+#: includes/class-wc-gateway-braintree-credit-card.php:305
 msgid "Display and Require the Card Security Code (CVV/CID) field on checkout"
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:974
-#: includes/payment-forms/class-wc-braintree-hosted-fields-payment-form.php:155
+#: includes/class-wc-gateway-braintree-credit-card.php:975
+#: includes/payment-forms/class-wc-braintree-hosted-fields-payment-form.php:163
 msgid ""
 "We cannot process your order with the payment information that you "
 "provided. Please use an alternate payment method."
 msgstr ""
 
-#: includes/class-wc-gateway-braintree-credit-card.php:982
+#: includes/class-wc-gateway-braintree-credit-card.php:983
 #: includes/class-wc-gateway-braintree.php:213
 msgid ""
 "Oops, there was a temporary payment error. Please try another payment "
@@ -718,6 +718,12 @@ msgstr ""
 msgid "Production"
 msgstr ""
 
+#: includes/class-wc-gateway-braintree.php:1671
+#. translators: Placeholders: %s - payment gateway title (such as
+#. Authorize.net, Braintree, etc)
+msgid "%s Order completely refunded."
+msgstr ""
+
 #: includes/integrations/Pre_Orders.php:56
 msgid "%s - Pre-Order Release Payment for Order %s"
 msgstr ""
@@ -771,23 +777,23 @@ msgid ""
 "before adding your payment method."
 msgstr ""
 
-#: woocommerce-gateway-paypal-powered-by-braintree.php:167
+#: woocommerce-gateway-paypal-powered-by-braintree.php:168
 msgid ""
 "Braintree for WooCommerce is inactive. Please deactivate the retired "
 "WooCommerce Braintree plugin."
 msgstr ""
 
-#: woocommerce-gateway-paypal-powered-by-braintree.php:189
+#: woocommerce-gateway-paypal-powered-by-braintree.php:190
 msgid "Braintree for WooCommerce is inactive because WooCommerce is not installed."
 msgstr ""
 
-#: woocommerce-gateway-paypal-powered-by-braintree.php:306
+#: woocommerce-gateway-paypal-powered-by-braintree.php:307
 msgid ""
 "The minimum PHP version required for this plugin is %1$s. You are running "
 "%2$s."
 msgstr ""
 
-#: woocommerce-gateway-paypal-powered-by-braintree.php:551
+#: woocommerce-gateway-paypal-powered-by-braintree.php:552
 msgid ""
 "%1$sWarning:%2$s Deleting a user will also delete the user's payment method "
 "saved on Braintree account."

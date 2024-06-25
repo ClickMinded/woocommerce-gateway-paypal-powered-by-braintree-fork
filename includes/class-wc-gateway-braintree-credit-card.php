@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_11_8 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_0 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -31,6 +31,7 @@ defined( 'ABSPATH' ) or exit;
  *
  * @since 3.0.0
  */
+#[AllowDynamicProperties]
 class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 
 
@@ -127,19 +128,6 @@ class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 	 */
 	public function enqueue_gateway_assets() {
 
-		// advanced/kount fraud tool
-		if ( $this->is_advanced_fraud_tool_enabled() ) {
-
-			// enqueue braintree-data.js library
-			wp_enqueue_script( 'braintree-js-data-collector', 'https://js.braintreegateway.com/web/' . WC_Braintree::BRAINTREE_JS_SDK_VERSION . '/js/data-collector.min.js', array( 'braintree-js-client' ), WC_Braintree::VERSION, true );
-
-			// adjust the script tag to add async attribute
-			add_filter( 'clean_url', array( $this, 'adjust_fraud_script_tag' ) );
-
-			// this script must be rendered to the page before the braintree-data.js library, hence priority 1
-			add_action( 'wp_print_footer_scripts', [ $this, 'render_fraud_js' ], 1 );
-		}
-
 		if ( $this->is_available() && $this->is_payment_form_page() ) {
 
 			parent::enqueue_gateway_assets();
@@ -148,6 +136,19 @@ class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 
 			if ( $this->is_3d_secure_enabled() ) {
 				wp_enqueue_script( 'braintree-js-3d-secure', 'https://js.braintreegateway.com/web/' . WC_Braintree::BRAINTREE_JS_SDK_VERSION . '/js/three-d-secure.min.js', array(), WC_Braintree::VERSION, true );
+			}
+
+			// Advanced/kount fraud tool.
+			if ( $this->is_advanced_fraud_tool_enabled() ) {
+
+				// Enqueue braintree-data.js library.
+				wp_enqueue_script( 'braintree-js-data-collector', 'https://js.braintreegateway.com/web/' . WC_Braintree::BRAINTREE_JS_SDK_VERSION . '/js/data-collector.min.js', array( 'braintree-js-client' ), WC_Braintree::VERSION, true );
+
+				// Adjust the script tag to add async attribute.
+				add_filter( 'clean_url', array( $this, 'adjust_fraud_script_tag' ) );
+
+				// This script must be rendered to the page before the braintree-data.js library, hence priority 1.
+				add_action( 'wp_print_footer_scripts', array( $this, 'render_fraud_js' ), 1 );
 			}
 		}
 	}
@@ -162,7 +163,7 @@ class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 	 *
 	 * @return array
 	 */
-	protected function get_payment_form_js_localized_script_params() {
+	protected function get_payment_form_js_localized_script_params(): array {
 
 		$params = parent::get_payment_form_js_localized_script_params();
 

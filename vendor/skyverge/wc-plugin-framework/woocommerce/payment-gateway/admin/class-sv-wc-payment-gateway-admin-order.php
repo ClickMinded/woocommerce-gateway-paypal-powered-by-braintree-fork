@@ -22,11 +22,11 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-namespace SkyVerge\WooCommerce\PluginFramework\v5_11_8;
+namespace SkyVerge\WooCommerce\PluginFramework\v5_12_0;
 
 defined( 'ABSPATH' ) or exit;
 
-if ( ! class_exists( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_11_8\\SV_WC_Payment_Gateway_Admin_Order' ) ) :
+if ( ! class_exists( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_12_0\\SV_WC_Payment_Gateway_Admin_Order' ) ) :
 
 
 /**
@@ -121,19 +121,21 @@ class SV_WC_Payment_Gateway_Admin_Order {
 	 */
 	protected function enqueue_edit_order_assets( \WC_Order $order ) {
 
-		wp_enqueue_script( 'sv-wc-payment-gateway-admin-order', $this->get_plugin()->get_payment_gateway_framework_assets_url() . '/dist/admin/sv-wc-payment-gateway-admin-order.js', array( 'jquery' ), SV_WC_Plugin::VERSION, true );
+		$version = $this->get_plugin()->get_assets_version();
+
+		wp_enqueue_script( 'sv-wc-payment-gateway-admin-order', $this->get_plugin()->get_payment_gateway_framework_assets_url() . '/dist/admin/sv-wc-payment-gateway-admin-order.js', [ 'jquery' ], $version, true );
 
 		wp_localize_script( 'sv-wc-payment-gateway-admin-order', 'sv_wc_payment_gateway_admin_order', array(
 			'ajax_url'       => admin_url( 'admin-ajax.php' ),
 			'gateway_id'     => $order->get_payment_method( 'edit' ),
 			'order_id'       => $order->get_id(),
-			'capture_ays'    => __( 'Are you sure you wish to process this capture? The action cannot be undone.', 'woocommerce-plugin-framework' ),
+			'capture_ays'    => _x( 'Are you sure you wish to process this capture? The action cannot be undone.', 'Payment transaction capture', 'woocommerce-plugin-framework' ),
 			'capture_action' => 'wc_' . $this->get_plugin()->get_id() . '_capture_charge',
 			'capture_nonce'  => wp_create_nonce( 'wc_' . $this->get_plugin()->get_id() . '_capture_charge' ),
-			'capture_error'  => __( 'Something went wrong, and the capture could no be completed. Please try again.', 'woocommerce-plugin-framework' ),
+			'capture_error'  => _x( 'Something went wrong, and the capture could not be completed. Please try again.', 'Payment transaction capture failed error message', 'woocommerce-plugin-framework' ),
 		) );
 
-		wp_enqueue_style( 'sv-wc-payment-gateway-admin-order', $this->get_plugin()->get_payment_gateway_framework_assets_url() . '/css/admin/sv-wc-payment-gateway-admin-order.min.css', SV_WC_Plugin::VERSION );
+		wp_enqueue_style( 'sv-wc-payment-gateway-admin-order', $this->get_plugin()->get_payment_gateway_framework_assets_url() . '/css/admin/sv-wc-payment-gateway-admin-order.min.css', $version );
 	}
 
 

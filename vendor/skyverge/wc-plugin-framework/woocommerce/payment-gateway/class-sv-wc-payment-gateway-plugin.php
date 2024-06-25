@@ -22,16 +22,16 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-namespace SkyVerge\WooCommerce\PluginFramework\v5_11_8;
+namespace SkyVerge\WooCommerce\PluginFramework\v5_12_0;
 
 use Automattic\WooCommerce\Admin\Notes\WC_Admin_Note;
 use Automattic\WooCommerce\Admin\Notes\WC_Admin_Notes;
-use SkyVerge\WooCommerce\PluginFramework\v5_11_8\Payment_Gateway\External_Checkout\External_Checkout;
-use SkyVerge\WooCommerce\PluginFramework\v5_11_8\Payment_Gateway\External_Checkout\Google_Pay\Google_Pay;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_0\Payment_Gateway\Blocks\Gateway_Blocks_Handler;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_0\Payment_Gateway\External_Checkout\Google_Pay\Google_Pay;
 
 defined( 'ABSPATH' ) or exit;
 
-if ( ! class_exists( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_11_8\\SV_WC_Payment_Gateway_Plugin' ) ) :
+if ( ! class_exists( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_12_0\\SV_WC_Payment_Gateway_Plugin' ) ) :
 
 
 /**
@@ -168,6 +168,23 @@ abstract class SV_WC_Payment_Gateway_Plugin extends SV_WC_Plugin {
 		require_once( $this->get_payment_gateway_framework_path() . '/rest-api/class-sv-wc-payment-gateway-plugin-rest-api.php' );
 
 		$this->rest_api_handler = new Payment_Gateway\REST_API( $this );
+	}
+
+
+	/**
+	 * Builds the gateway blocks handler instance.
+	 *
+	 * @since 5.12.0
+	 *
+	 * @return void
+	 */
+	protected function init_blocks_handler() : void {
+
+		require_once( $this->get_framework_path() . '/Blocks/Blocks_Handler.php' );
+		require_once( $this->get_framework_path() . '/payment-gateway/Blocks/Gateway_Blocks_Handler.php' );
+
+		// individual gateway plugins should initialize their block integrations handler by overriding this method
+		$this->blocks_handler = new Gateway_Blocks_Handler( $this );
 	}
 
 
@@ -773,15 +790,9 @@ abstract class SV_WC_Payment_Gateway_Plugin extends SV_WC_Plugin {
 				$accepted_currencies = $this->get_accepted_currencies();
 			}
 
-			/* translators: [Plugin name] accepts payments in [currency/list of currencies] only */
 			$message = sprintf(
 				/* translators: Placeholders: %1$s - plugin name, %2$s - a currency/comma-separated list of currencies, %3$s - <a> tag, %4$s - </a> tag */
-				_n(
-					'%1$s accepts payment in %2$s only. %3$sConfigure%4$s WooCommerce to accept %2$s to enable this gateway for checkout.',
-					'%1$s accepts payment in one of %2$s only. %3$sConfigure%4$s WooCommerce to accept one of %2$s to enable this gateway for checkout.',
-					count( $accepted_currencies ),
-					'woocommerce-plugin-framework'
-				),
+				_n('%1$s accepts payment in %2$s only. %3$sConfigure%4$s WooCommerce to accept %2$s to enable this gateway for checkout.', '%1$s accepts payment in one of %2$s only. %3$sConfigure%4$s WooCommerce to accept one of %2$s to enable this gateway for checkout.', count( $accepted_currencies ), 'woocommerce-plugin-framework' ),
 				$name,
 				'<strong>' . implode( ', ', $accepted_currencies ) . '</strong>',
 				'<a href="' . $this->get_general_configuration_url() . '">',
@@ -969,9 +980,9 @@ abstract class SV_WC_Payment_Gateway_Plugin extends SV_WC_Plugin {
 				// subscriptions
 				if ( $this->is_subscriptions_active() && $gateway->is_enabled() && $tokenization_supported_but_not_enabled ) {
 
-					/* translators: Placeholders: %1$s - payment gateway title (such as Authorize.net, Braintree, etc), %2$s - <a> tag, %3$s - </a> tag */
 					$message = sprintf(
-						esc_html__( '%1$s is inactive for subscription transactions. Please %2$senable tokenization%3$s to activate %1$s for Subscriptions.', 'woocommerce-plugin-framework' ),
+					/* translators: Placeholders: %1$s - payment gateway title (such as Authorize.net, Braintree, etc), %2$s - <a> tag, %3$s - </a> tag */
+					esc_html__( '%1$s is inactive for subscription transactions. Please %2$senable tokenization%3$s to activate %1$s for Subscriptions.', 'woocommerce-plugin-framework' ),
 						$gateway->get_method_title(),
 						'<a href="' . $this->get_payment_gateway_configuration_url( $gateway->get_id() ) . '">',
 						'</a>'
@@ -1457,6 +1468,34 @@ abstract class SV_WC_Payment_Gateway_Plugin extends SV_WC_Plugin {
 		}
 
 		return $this->pre_orders_active = $this->is_plugin_active( 'woocommerce-pre-orders.php' );
+	}
+
+
+	/**
+	 * Gets the plugin version to be used by any internal scripts.
+	 *
+	 * This normally corresponds to the plugin version, but can be overridden when debug mode is used.
+	 * In that case `time()` will be used to force cache bursting.
+	 *
+	 * @since 5.12.0
+	 *
+	 * @param string|null $gateway_id
+	 * @return string
+	 */
+	public function get_assets_version( ?string $gateway_id = null ) : string  {
+
+		$script_version = parent::get_assets_version();
+
+		if ( $gateway_id ) {
+
+			$gateway = $this->get_gateway( $gateway_id );
+
+			if ( $gateway && ! $gateway->debug_off() ) {
+				$script_version = time();
+			}
+		}
+
+		return $script_version;
 	}
 
 

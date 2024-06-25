@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { useState, useEffect } from '@wordpress/element';
+import { getSetting } from '@woocommerce/settings';
 
 /**
  * Internal dependencies
@@ -18,6 +19,8 @@ import { BraintreeDescription } from './description';
 
 const { integrationErrorMessage } = getBraintreeCreditCardServerData();
 const cardIcons = getCardIcons();
+const isBlockTheme = getSetting( 'isBlockTheme' );
+const errorNoticeClass = isBlockTheme ? 'wc-block-components-notice-banner is-error' : 'woocommerce-error';
 
 /**
  * BrainTree Credit Card component.
@@ -70,7 +73,7 @@ export const BraintreeCreditCard = (props) => {
 	}, [setupIntegration]);
 
 	if (errorMessage) {
-		return <div className="woocommerce-error">{errorMessage}</div>;
+		return <div className={ errorNoticeClass }>{errorMessage}</div>;;
 	}
 
 	return (

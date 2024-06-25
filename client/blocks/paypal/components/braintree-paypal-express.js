@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { useState } from '@wordpress/element';
+import { getSetting } from '@woocommerce/settings';
 
 /**
  * Internal dependencies
@@ -9,6 +10,9 @@ import { useState } from '@wordpress/element';
 import { PayPalButtons } from './paypal-buttons';
 import { PayPalPayLaterMessaging } from './pay-later-messaging';
 import { usePaymentForm } from '../use-payment-form';
+
+const isBlockTheme = getSetting( 'isBlockTheme' );
+const errorNoticeClass = isBlockTheme ? 'wc-block-components-notice-banner is-error' : 'woocommerce-error';
 
 /**
  * Renders the Braintree PayPal Button and PayLater Messaging.
@@ -43,7 +47,7 @@ export const BraintreePayPalExpress = (props) => {
 	return (
 		<>
 			{errorMessage && (
-				<div className="woocommerce-error">{errorMessage}</div>
+				<div className={ errorNoticeClass }>{errorMessage}</div>
 			)}
 			{!errorMessage && (
 				<LoadingMask isLoading={!isLoaded}>

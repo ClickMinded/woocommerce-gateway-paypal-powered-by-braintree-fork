@@ -121,6 +121,20 @@ final class WC_Gateway_Braintree_PayPal_Blocks_Support extends WC_Gateway_Braint
 			$saved_methods['braintree_paypal'] = $saved_tokens;
 		}
 
+		// Loop through $saved_methods and remove them if braintree gateways has tokenization off.
+		foreach ( $saved_methods as $type => $saved_method ) {
+			foreach ( $saved_method as $key => $value ) {
+				$gateway = $value['method']['gateway'];
+				if ( 'braintree_credit_card' === $gateway || 'braintree_paypal' === $gateway ) {
+					$tokenization = $payment_gateways[ $gateway ]->settings['tokenization'];
+					if ( 'no' === $tokenization ) {
+						unset( $saved_method[ $key ] );
+					}
+				}
+			}
+			$saved_methods[ $type ] = $saved_method;
+		}
+
 		return $saved_methods;
 	}
 }

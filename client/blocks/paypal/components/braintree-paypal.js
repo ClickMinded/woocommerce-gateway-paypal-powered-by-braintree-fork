@@ -3,6 +3,7 @@
  */
 import { useState, useEffect } from '@wordpress/element';
 import { select, dispatch } from '@wordpress/data';
+import { getSetting } from '@woocommerce/settings';
 
 /**
  * Internal dependencies
@@ -17,6 +18,9 @@ import { getBraintreePayPalServerData } from '../utils';
 
 const { isCheckoutConfirmation, payPalCustomerDetails } =
 	getBraintreePayPalServerData();
+
+const isBlockTheme = getSetting( 'isBlockTheme' );
+const errorNoticeClass = isBlockTheme ? 'wc-block-components-notice-banner is-error' : 'woocommerce-error';
 
 const mergeAddress = (address, address2) => {
 	if (!address2) {
@@ -137,7 +141,7 @@ export const BraintreePayPal = (props) => {
 				/>
 			)}
 			{errorMessage && (
-				<div className="woocommerce-error">{errorMessage}</div>
+				<div className={ errorNoticeClass }>{ errorMessage }</div>
 			)}
 			{!errorMessage && (
 				<LoadingMask isLoading={!isLoaded} showSpinner={true}>

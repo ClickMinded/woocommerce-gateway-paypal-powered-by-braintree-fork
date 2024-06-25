@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_11_8 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_0 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -204,6 +204,7 @@ abstract class WC_Braintree_Payment_Form extends Framework\SV_WC_Payment_Gateway
 			'debug'              => $this->get_gateway()->debug_log(),
 			'type'               => str_replace( '-', '_', $this->get_gateway()->get_payment_type() ),
 			'client_token_nonce' => wp_create_nonce( 'wc_' . $this->get_gateway()->get_id() . '_get_client_token' ),
+			'is_block_theme'     => wp_is_block_theme(),
 		], $this->get_payment_form_handler_js_params() );
 
 		return $args;

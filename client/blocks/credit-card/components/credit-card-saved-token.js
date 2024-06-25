@@ -3,6 +3,7 @@
  */
 import { useState, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { getSetting } from '@woocommerce/settings';
 
 /**
  * Internal dependencies
@@ -12,6 +13,8 @@ import { BraintreeCreditCardFields } from './credit-card-fields';
 import { CheckoutHandler } from '../checkout-handler';
 import { getBraintreeCreditCardServerData, logData } from '../utils';
 
+const isBlockTheme = getSetting( 'isBlockTheme' );
+const errorNoticeClass = isBlockTheme ? 'wc-block-components-notice-banner is-error' : 'woocommerce-error';
 const { cscRequired, integrationErrorMessage } =
 	getBraintreeCreditCardServerData();
 
@@ -61,7 +64,7 @@ export const BraintreeCreditCardSavedToken = (props) => {
 	}, [setupIntegration]);
 
 	if (errorMessage) {
-		return <div className="woocommerce-error">{errorMessage}</div>;
+		return <div className={ errorNoticeClass }>{errorMessage}</div>;
 	}
 
 	return (

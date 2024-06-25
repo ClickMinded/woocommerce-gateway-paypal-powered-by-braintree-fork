@@ -1,10 +1,10 @@
 === Braintree for WooCommerce Payment Gateway ===
-Contributors: automattic, akeda, allendav, royho, slash1andy, woosteve, spraveenitpro, mikedmoore, fernashes, shellbeezy, danieldudzic, dsmithweb, fullysupportedphil, corsonr, zandyring, skyverge
+Contributors: woocommerce, automattic, skyverge
 Tags: ecommerce, e-commerce, commerce, woothemes, wordpress ecommerce, store, sales, sell, shop, shopping, cart, checkout, configurable, paypal, braintree
 Requires at least: 6.3
-Tested up to: 6.4
+Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 3.1.3
+Stable tag: 3.1.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -16,7 +16,7 @@ The Braintree for WooCommerce gateway lets you accept **credit cards and PayPal 
 
 With this gateway, you can **securely sell your products** online using Hosted Fields, which help you meet security requirements without sacrificing flexibility or an integrated checkout process. Hosted Fields, similar to iFrames, are hosted on PayPal's servers but fit inside the checkout form elements on your site, providing a **secure, seamless** means for customers to share their payment information.
 
-Braintree for WooCommerce supports tokenization, letting your customers save their credit cards or connect their PayPal account for faster, easier subsequent checkouts. The gateway also supports <a href="https://woocommerce.com/products/woocommerce-subscriptions/" target="_blank">WooCommerce Subscriptions</a> to let you sell products with recurring billing and <a href="https://woocommerce.com/products/woocommerce-pre-orders/" target="_blank">WooCommerce Pre-Orders</a>, which supports accepting payments for upcoming products as they ship or up-front.
+Braintree for WooCommerce supports tokenization, letting your customers save their credit cards or connect their PayPal account for faster, easier subsequent checkouts. The gateway also supports <a href="https://woocommerce.com/products/woocommerce-subscriptions/" target="_blank">WooCommerce Subscriptions</a> to let you sell products with recurring billing and <a href="https://woocommerce.com/products/woocommerce-pre-orders/" target="_blank">WooCommerce Pre-Orders</a>, which supports accepting payments for upcoming products as they ship or up-front but it's important to understand that enabling tokenization in the settings will create a billing agreement ID. This billing agreement ID is necessary for future transactions when tokenization is enabled. If a user does not intend to use the same payment method for future transactions, they can disable tokenization to avoid creating a billing agreement ID.
 
 = Powering Advanced Payments =
 
@@ -68,7 +68,7 @@ Yes! This plugin supports tokenization, which is required for recurring payments
 
 = What currencies are supported? =
 
-This plugin supports all countries in which Braintree is available. You can use your native currency, or you can add multiple merchant IDs to process different currencies via different Braintree accounts. To use multi-currency, your site must use a **currency switcher** to adjust the order currency (may require purchase). We’ve tested this plugin with the [Aelia Currency Switcher](https://aelia.co/shop/currency-switcher-woocommerce/) (requires purchase).
+This plugin supports all countries in which Braintree is available. You can use your native currency, or you can add multiple merchant IDs to process different currencies via different Braintree accounts. To use multi-currency, your site must use a **currency switcher** to adjust the order currency (may require purchase). Weâ€™ve tested this plugin with the [Aelia Currency Switcher](https://aelia.co/shop/currency-switcher-woocommerce/) (requires purchase).
 
 = Can non-US merchants use this plugin? =
 
@@ -106,6 +106,26 @@ If not, please get in touch with us through the [plugin forums](https://wordpres
 6. Checkout with PayPal directly from the product page
 
 == Changelog ==
+
+= 3.1.6 - 2024-05-20 =
+* Dev - Bump WooCommerce "tested up to" version 8.9.
+* Dev - Bump WooCommerce minimum supported version to 8.7.
+
+= 3.1.5 - 2024-03-25 =
+* Dev - Bump WooCommerce "tested up to" version 8.7.
+* Dev - Bump WooCommerce minimum supported version to 8.5
+* Dev - Bump WordPress "tested up to" version 6.5.
+* Dev - Update documentation around why billing agreements are being created for one-time purchases.
+* Fix - Ensure that the order status updates to 'refunded' only once after a successful refund.
+* Fix - Missing dependencies error on non-payment pages when advanced fraud tool is enabled.
+* Fix - Make the error notice UI consistent with Block Cart/Checkout UI.
+
+= 3.1.4 - 2024-03-11 =
+* Tweak - Move PayPal buttons below "add to cart" button on product pages.
+* Dev - Bump WooCommerce "tested up to" version 8.6.
+* Dev - Bump WooCommerce minimum supported version to 8.4.
+* Dev - Bump WordPress minimum supported version to 6.3.
+* Fix - Saved payment methods no longer appear in the Block checkout when tokenization is disabled.
 
 = 3.1.3 - 2024-02-05 =
 * Add - Cart and Checkout block support for PayPal Express Checkout.
@@ -168,31 +188,31 @@ If not, please get in touch with us through the [plugin forums](https://wordpres
 * Fix - Admin can now save multiple merchant Account IDs.
 
 = 3.0.2 - 2023-05-24 =
-* Add – Support for Cart and Checkout blocks.
-* Dev – Bump WooCommerce minimum supported version from 6.0 to 6.8.
-* Dev – Bump WooCommerce “tested up to” version 7.4.
-* Dev – Bump WooCommerce “tested up to” version 7.6.
-* Dev – Bump WordPress minimum supported version from 5.6 to 5.8.
-* Dev – Bump WordPress “tested up to” version 6.2.
+* Add â€“ Support for Cart and Checkout blocks.
+* Dev â€“ Bump WooCommerce minimum supported version from 6.0 to 6.8.
+* Dev â€“ Bump WooCommerce â€œtested up toâ€ version 7.4.
+* Dev â€“ Bump WooCommerce â€œtested up toâ€ version 7.6.
+* Dev â€“ Bump WordPress minimum supported version from 5.6 to 5.8.
+* Dev â€“ Bump WordPress â€œtested up toâ€ version 6.2.
 
 = 3.0.1 - 2023-04-04 =
-* Dev – Build with `Gulp` instead of using `skyverge/sake`
+* Dev â€“ Build withÂ `Gulp`Â instead of usingÂ `skyverge/sake`
 
 = 3.0.0 - 2023-03-16 =
 - Dev - Bump WooCommerce "tested up to" version 7.3.0.
 - Dev - Resolve linting issues.
 
 = 2.9.1 - 2022-12-19 =
-*  Added – Warning about Braintree payment method at User delete confirmation screen.
-*  Fix – Don’t delete the payment method at Braintree if website is staging environment.
-*  Fix – Billing address details do not get autofilled on the checkout page when using express checkout.
-*  Update – Node version from v12 to v16.
-*  Update – Npm version to v8.
+*  Added â€“ Warning about Braintree payment method at User delete confirmation screen.
+*  Fix â€“ Donâ€™t delete the payment method at Braintree if website is staging environment.
+*  Fix â€“ Billing address details do not get autofilled on the checkout page when using express checkout.
+*  Update â€“ Node version from v12 to v16.
+*  Update â€“ Npm version to v8.
 
 = 2.9.0 - 2022-11-01 =
-* Add – Support for High-performance Order Storage (“HPOS”).
-* Add – Declare compatibility with High-Performance Order Storage (“HPOS”).
-* Fix – Display more detailed error messages on checkout.
+* Add â€“ Support for High-performance Order Storage (â€œHPOSâ€).
+* Add â€“ Declare compatibility with High-Performance Order Storage (â€œHPOSâ€).
+* Fix â€“ Display more detailed error messages on checkout.
 
 = 2.8.0 - 2022-10-12 =
 * Add - Support for 3DS2 / EMV 3DS cards.
@@ -210,8 +230,8 @@ If not, please get in touch with us through the [plugin forums](https://wordpres
 * Tweak - Bump "WordPress tested up to" version to 6.0
 
 = 2.6.4 - 2022-04-04 =
-* Fix – Improve Subscriptions with WooCommerce Payments feature compatibility with Braintree (PayPal) Buttons
-* Tweak – Fraud tools setting description improvements
+* Fix â€“ Improve Subscriptions with WooCommerce Payments feature compatibility with Braintree (PayPal) Buttons
+* Tweak â€“ Fraud tools setting description improvements
 
 = 2.6.3 - 2022-03-16 =
 * Fix - is_ajax deprecation message

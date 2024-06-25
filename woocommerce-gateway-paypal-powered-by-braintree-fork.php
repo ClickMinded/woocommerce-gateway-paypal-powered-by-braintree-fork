@@ -1,19 +1,20 @@
 <?php
 /**
  * Plugin Name: Braintree for WooCommerce Payment Gateway
+ * Requires Plugins: woocommerce
  * Plugin URI: https://docs.woocommerce.com/document/woocommerce-gateway-paypal-powered-by-braintree/
  * Documentation URI: https://docs.woocommerce.com/document/woocommerce-gateway-paypal-powered-by-braintree/
  * Description: <code><strong>[Forked version by ClickMinded - resolved issue about payment fields being cleared]</strong></code> Receive credit card or PayPal payments using Braintree for WooCommerce.  A server with cURL, SSL support, and a valid SSL certificate is required (for security reasons) for this gateway to function. Requires PHP 7.4+
  * Author: WooCommerce
  * Author URI: http://woocommerce.com/
- * Version: 3.1.3
+ * Version: 3.1.6.1
  * Text Domain: woocommerce-gateway-paypal-powered-by-braintree
  * Domain Path: /i18n/languages/
  *
  * Requires at least: 6.3
- * Tested up to: 6.4
- * WC requires at least: 8.3
- * WC tested up to: 8.5
+ * Tested up to: 6.5
+ * WC requires at least: 8.7
+ * WC tested up to: 8.9
  * Requires PHP: 7.4
  * PHP tested up to: 8.3
  *
@@ -57,13 +58,13 @@ class WC_PayPal_Braintree_Loader {
 	const MINIMUM_PHP_VERSION = '7.4';
 
 	/** minimum WordPress version required by this plugin */
-	const MINIMUM_WP_VERSION = '6.2';
+	const MINIMUM_WP_VERSION = '6.3';
 
 	/** minimum WooCommerce version required by this plugin */
-	const MINIMUM_WC_VERSION = '8.2';
+	const MINIMUM_WC_VERSION = '8.7';
 
 	/** SkyVerge plugin framework version used by this plugin */
-	const FRAMEWORK_VERSION = '5.11.8';
+	const FRAMEWORK_VERSION = '5.12.0';
 
 	/** the plugin name, for displaying notices */
 	const PLUGIN_NAME = 'Braintree for WooCommerce';
@@ -195,7 +196,7 @@ class WC_PayPal_Braintree_Loader {
 		}
 
 		// fire it up!
-		wc_braintree();
+		add_action( 'woocommerce_init', 'wc_braintree' );
 	}
 
 
@@ -626,11 +627,5 @@ class WC_PayPal_Braintree_Loader {
 		}
 	}
 }
-
-add_action( 'before_woocommerce_init', function() {
-	if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
-		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
-	}
-} );
 
 WC_PayPal_Braintree_Loader::instance();

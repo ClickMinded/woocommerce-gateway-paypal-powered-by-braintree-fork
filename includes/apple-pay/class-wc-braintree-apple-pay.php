@@ -24,7 +24,7 @@
 
 namespace WC_Braintree;
 
-use SkyVerge\WooCommerce\PluginFramework\v5_11_8 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_0 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -44,8 +44,30 @@ class Apple_Pay extends Framework\SV_WC_Payment_Gateway_Apple_Pay {
 	protected function init_frontend() {
 
 		$this->frontend = new Apple_Pay\Frontend( $this->get_plugin(), $this );
+		// Runs at priority 11 to ensure that the button is moved after the framework's init fires.
+		add_action( 'wp', array( $this, 'post_init' ), 11 );
 	}
 
+	/**
+	 * Modify Apple Pay button after framework has been initialized.
+	 *
+	 * Moves the Apple Pay button to the new location following the framework's initialization.
+	 * As the framework uses a protected function for determining the locations in which buttons
+	 * are displayed, we determine whether it has registered the actions and move them if required.
+	 *
+	 * @see https://github.com/woocommerce/woocommerce-gateway-paypal-powered-by-braintree/pull/535
+	 */
+	public function post_init() {
+		if ( has_action( 'woocommerce_before_add_to_cart_button', array( $this->frontend, 'maybe_render_external_checkout' ) ) ) {
+			remove_action( 'woocommerce_before_add_to_cart_button', array( $this->frontend, 'maybe_render_external_checkout' ) );
+			add_action( 'woocommerce_after_add_to_cart_button', array( $this->frontend, 'maybe_render_external_checkout' ) );
+		}
+
+		if ( has_action( 'woocommerce_proceed_to_checkout', array( $this->frontend, 'maybe_render_external_checkout' ) ) ) {
+			remove_action( 'woocommerce_proceed_to_checkout', array( $this->frontend, 'maybe_render_external_checkout' ) );
+			add_action( 'woocommerce_proceed_to_checkout', array( $this->frontend, 'maybe_render_external_checkout' ), 30 );
+		}
+	}
 
 	/**
 	 * Builds a new payment request.
