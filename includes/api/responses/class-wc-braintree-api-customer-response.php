@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_12_0 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_7 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -109,7 +109,7 @@ class WC_Braintree_API_Customer_Response extends WC_Braintree_API_Vault_Response
 		foreach ( $this->response->paymentMethods as $method ) {
 
 			// only credit cards or PayPal accounts
-			if ( ! in_array( get_class( $method ), [ 'Braintree\CreditCard', 'Braintree\PayPalAccount' ] ) ) {
+			if ( ! in_array( get_class( $method ), array( 'Braintree\CreditCard', 'Braintree\PayPalAccount', 'Braintree\ApplePayCard' ), true ) ) {
 				continue;
 			}
 

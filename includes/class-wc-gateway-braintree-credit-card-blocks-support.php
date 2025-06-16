@@ -5,7 +5,7 @@
  * @package WC-Braintree/Gateway/Blocks-Support
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_12_0 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_7 as Framework;
 
 /**
  * Braintree CreditCard payment method Blocks integration
@@ -20,7 +20,7 @@ final class WC_Gateway_Braintree_Credit_Card_Blocks_Support extends WC_Gateway_B
 	public function __construct() {
 		$this->name       = 'braintree_credit_card';
 		$this->asset_path = WC_Braintree::instance()->get_plugin_path() . '/assets/js/blocks/credit-card.asset.php';
-		$this->script_url = WC_Braintree::instance()->get_plugin_url() . '/assets/js/blocks/credit-card.js';
+		$this->script_url = WC_Braintree::instance()->get_plugin_url() . '/assets/js/blocks/credit-card.min.js';
 
 		// Get the saved token 3DS nonce via AJAX.
 		add_filter( 'wp_ajax_wc_' . $this->name . '_get_token_data', array( $this, 'ajax_get_token_data' ) );
@@ -97,7 +97,7 @@ final class WC_Gateway_Braintree_Credit_Card_Blocks_Support extends WC_Gateway_B
 			);
 
 			if ( empty( $core_token ) ) {
-				wp_send_json_error( array( 'message' => esc_html__( 'Payment error, please try another payment method or contact us to complete your transaction.', 'woocommerce-plugin-framework' ) ) );
+				wp_send_json_error( array( 'message' => esc_html__( 'Payment error, please try another payment method or contact us to complete your transaction.', 'woocommerce-gateway-paypal-powered-by-braintree' ) ) );
 			}
 			$core_token = current( $core_token );
 

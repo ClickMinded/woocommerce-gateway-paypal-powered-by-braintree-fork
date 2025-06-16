@@ -24,9 +24,9 @@
 
 namespace WC_Braintree\Apple_Pay;
 
-use SkyVerge\WooCommerce\PluginFramework\v5_12_0 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_7 as Framework;
 
-defined( 'ABSPATH' ) or exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * The Braintree Apple Pay frontend handler.
@@ -60,7 +60,7 @@ class Frontend extends Framework\SV_WC_Payment_Gateway_Apple_Pay_Frontend {
 
 		parent::enqueue_scripts();
 
-		// braintree.js library
+		// braintree.js library.
 		wp_enqueue_script( 'braintree-js-client', 'https://js.braintreegateway.com/web/' . \WC_Braintree::BRAINTREE_JS_SDK_VERSION . '/js/client.min.js', array(), \WC_Braintree::VERSION, true );
 
 		wp_enqueue_script( 'braintree-js-apple-pay', 'https://js.braintreegateway.com/web/' . \WC_Braintree::BRAINTREE_JS_SDK_VERSION . '/js/apple-pay.min.js', array( 'braintree-js-client' ), \WC_Braintree::VERSION, true );
@@ -84,9 +84,138 @@ class Frontend extends Framework\SV_WC_Payment_Gateway_Apple_Pay_Frontend {
 
 		$params['store_name']         = get_bloginfo( 'name' );
 		$params['client_token_nonce'] = wp_create_nonce( 'wc_' . $this->get_gateway()->get_id() . '_get_client_token' );
+		$params['force_tokenization'] = $this->is_tokenization_forced();
 
 		return $params;
 	}
 
 
+	/**
+	 * Determines if tokenization should be forced for Digital Wallets
+	 * depending on the page on which they're used.
+	 *
+	 * @since 3.2.0
+	 *
+	 * @return boolean
+	 */
+	protected function is_tokenization_forced() {
+		$product = wc_get_product();
+
+		if ( ! $this->get_plugin()->is_subscriptions_active() ) {
+			return false;
+		}
+
+		// Check if page is single product page and product type is subscription.
+		if ( is_product() && $product && \WC_Subscriptions_Product::is_subscription( $product ) ) {
+			return true;
+		}
+
+		if ( ( is_cart() || is_checkout() ) && \WC_Subscriptions_Cart::cart_contains_subscription() ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Determines if the external checkout frontend should be initialized on a product page.
+	 *
+	 * @since 3.2.0
+	 *
+	 * @param array $locations configured display locations.
+	 * @return bool
+	 */
+	protected function should_init_on_product_page( $locations = array() ): bool {
+		if ( ! is_user_logged_in() ) {
+			return parent::should_init_on_product_page( $locations ) && ! $this->is_tokenization_forced();
+		}
+
+		return parent::should_init_on_product_page( $locations );
+	}
+
+	/**
+	 * Determines if the external checkout frontend should be initialized on a cart page.
+	 *
+	 * @since 3.2.0
+	 *
+	 * @param array $locations configured display locations.
+	 * @return bool
+	 */
+	protected function should_init_on_cart_page( $locations = array() ): bool {
+		if ( ! is_user_logged_in() ) {
+			return parent::should_init_on_cart_page( $locations ) && ! $this->is_tokenization_forced();
+		}
+
+		return parent::should_init_on_cart_page( $locations );
+	}
+
+	/**
+	 * Determines if the external checkout frontend should be initialized on a checkout page.
+	 *
+	 * @since 3.2.0
+	 *
+	 * @param array $locations configured display locations.
+	 * @return bool
+	 */
+	protected function should_init_on_checkout_page( $locations = array() ): bool {
+		if ( ! is_user_logged_in() ) {
+			return parent::should_init_on_checkout_page( $locations ) && ! $this->is_tokenization_forced();
+		}
+
+		return parent::should_init_on_checkout_page( $locations );
+	}
+
+	/**
+	 * Renders an Apple Pay button.
+	 *
+	 * @since 3.2.2
+	 */
+	public function render_button() {
+
+		$button_text = '';
+		$classes     = array(
+			'sv-wc-apple-pay-button',
+		);
+
+		switch ( $this->get_handler()->get_button_style() ) {
+
+			case 'black':
+				$classes[] = 'apple-pay-button-black';
+				break;
+
+			case 'white':
+				$classes[] = 'apple-pay-button-white';
+				break;
+
+			case 'white-with-line':
+				$classes[] = 'apple-pay-button-white-with-line';
+				break;
+		}
+
+		if ( $this->is_tokenization_forced() ) {
+			$classes[] = 'apple-pay-button-subscription';
+		}
+
+		// if on the single product page, add some text.
+		if ( is_product() ) {
+			$classes[]   = 'apple-pay-button-buy-now';
+			$button_text = _x( 'Buy with', 'Apple Pay', 'woocommerce-gateway-paypal-powered-by-braintree' );
+		}
+
+		if ( $button_text ) {
+			$classes[] = 'apple-pay-button-with-text';
+		}
+
+		if ( is_checkout() ) {
+			printf( '<span class="wc-braintree-express-payment-title">%s</span>', esc_html__( 'Express checkout', 'woocommerce-gateway-paypal-powered-by-braintree' ) );
+		}
+
+		echo '<button class="' . implode( ' ', array_map( 'sanitize_html_class', $classes ) ) . '" lang="' . esc_attr( substr( get_locale(), 0, 2 ) ) . '">';
+
+		if ( $button_text ) {
+			echo '<span class="text">' . esc_html( $button_text ) . '</span><span class="logo"></span>';
+		}
+
+		echo '</button>';
+	}
 }

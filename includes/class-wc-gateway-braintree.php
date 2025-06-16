@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_12_0 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_7 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -239,7 +239,7 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 			$order->payment->nonce = Framework\SV_WC_Helper::get_posted_value( 'wc_'. $this->get_id() . '_payment_nonce' );
 		}
 
-		$order->payment->tokenize = $this->get_payment_tokens_handler()->should_tokenize();
+		$order->payment->tokenize = $this->get_payment_tokens_handler()->should_tokenize() || $this->should_tokenize_apple_pay_card();
 
 		// billing address ID if using existing payment token
 		if ( ! empty( $order->payment->token ) && $this->get_payment_tokens_handler()->user_has_token( $order->get_user_id(), $order->payment->token ) ) {
@@ -297,6 +297,141 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 		return $order;
 	}
 
+	/**
+	 * Gets the payment data that is submitted by the Apple Pay payment method.
+	 *
+	 * @since 3.2.0
+	 *
+	 * @return array
+	 */
+	public function get_apple_pay_payment_data() {
+		$payment_data = sanitize_text_field( wp_unslash( $_POST['payment'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+		if ( ! empty( $payment_data ) ) {
+			$payment_data = json_decode( stripslashes( $payment_data ), true );
+		} else {
+			$payment_data = array();
+		}
+
+		return $payment_data;
+	}
+
+	/**
+	 * Returns true if the payment method is Apple Pay, false otherwise.
+	 *
+	 * @since 3.2.0
+	 *
+	 * @return bool
+	 */
+	public function is_apple_pay() {
+		$payment_data = $this->get_apple_pay_payment_data();
+
+		return isset( $payment_data['source'] ) && 'apple_pay' === $payment_data['source'];
+	}
+
+	/**
+	 * Determines whether Apple Pay card should be tokenized.
+	 *
+	 * @since 3.2.0
+	 *
+	 * @return bool
+	 */
+	public function should_tokenize_apple_pay_card() {
+		if ( ! $this->is_apple_pay() ) {
+			return false;
+		}
+
+		$payment_data = $this->get_apple_pay_payment_data();
+
+		return isset( $payment_data['force_tokenization'] ) && $payment_data['force_tokenization'];
+	}
+
+	/**
+	 * Determines whether tokenization should be performed before the sale.
+	 *
+	 * Most gateways should always tokenize before the sale if the order total is 0.00 (such as a free trial), because
+	 * they don't allow 0.00 transactions (but do allow tokenizing without a transaction).
+	 *
+	 * Gateways that don't support tokenization before the sale (without a transaction) should override this method to
+	 * return false, even if order total is 0.00. Note that when doing, so the gateway should also override
+	 * `can_tokenize_with_or_after_sale()` to return true.
+	 *
+	 * Finally, gateways that only tokenize with sale (Moneris), may need to override `should_skip_transaction()` to return false.
+	 *
+	 * @see SV_WC_Payment_Gateway_Direct::should_tokenize_with_or_after_sale()
+	 * @see SV_WC_Payment_Gateway_Direct::can_tokenize_with_or_after_sale()
+	 * @see SV_WC_Payment_Gateway_Direct::should_skip_transaction()
+	 *
+	 * @since 3.2.0
+	 *
+	 * @param \WC_Order $order the order being paid for.
+	 * @return bool
+	 */
+	protected function should_tokenize_before_sale( \WC_Order $order ): bool {
+		$tokenize_credit_card    = $this->get_payment_tokens_handler()->should_tokenize();
+		$tokenize_apple_pay_card = $this->should_tokenize_apple_pay_card();
+		$result                  = ( $tokenize_credit_card || $tokenize_apple_pay_card ) && ( '0.00' === $order->payment_total || $this->tokenize_before_sale() );
+
+		/**
+		 * Filters whether tokenization should be performed before the sale, for a given order.
+		 *
+		 * @see SV_WC_Payment_Gateway_Direct::should_tokenize_before_sale()
+		 *
+		 * @since 3.2.0
+		 *
+		 * @param bool $result
+		 * @param \WC_Order $order the order being paid for
+		 * @param SV_WC_Payment_Gateway_Direct $gateway the gateway instance
+		 * @return bool
+		 */
+		return apply_filters(
+			"wc_payment_gateway_{$this->get_id()}_should_tokenize_before_sale",
+			$result,
+			$order,
+			$this
+		);
+	}
+
+	/**
+	 * Determines whether tokenization should be performed after the sale.
+	 *
+	 * Performs checks to ensure that the gateway supports tokenization, that the order is not a guest order,
+	 * that the gateway supports tokenization after the sale, and that the gateway is configured to tokenize after the sale.
+	 *
+	 * @see SV_WC_Payment_Gateway_Direct::should_tokenize_before_sale()
+	 *
+	 * @since 3.2.0
+	 *
+	 * @param \WC_Order $order the order that was paid for.
+	 * @return bool
+	 */
+	protected function should_tokenize_with_or_after_sale( \WC_Order $order ): bool {
+
+		$result = $this->supports_tokenization() &&
+				0 !== (int) $order->get_user_id() &&
+				( $this->get_payment_tokens_handler()->should_tokenize() || $this->should_tokenize_apple_pay_card() ) &&
+				( $this->tokenize_with_sale() || $this->tokenize_after_sale() ) &&
+				$this->can_tokenize_with_or_after_sale( $order );
+
+		/**
+		 * Filters whether tokenization should be performed with or after the sale, for a given order.
+		 *
+		 * @see SV_WC_Payment_Gateway_Direct::should_tokenize_with_or_after_sale()
+		 *
+		 * @since 3.2.0
+		 *
+		 * @param bool $result
+		 * @param \WC_Order $order the order being paid for
+		 * @param SV_WC_Payment_Gateway_Direct $gateway the gateway instance
+		 * @return bool
+		 */
+		return apply_filters(
+			"wc_payment_gateway_{$this->get_id()}_should_tokenize_with_or_after_sale",
+			$result,
+			$order,
+			$this
+		);
+	}
 
 	/**
 	 * Gets the order object with data added to process a refund.
@@ -549,12 +684,14 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 
 				esc_html_e( 'Connect/Disconnect', 'woocommerce-gateway-paypal-powered-by-braintree' );
 
-				echo wc_help_tip( sprintf(
-					'%s<br><br>%s<br><br>%s',
-					__( 'You just connected your Braintree account to WooCommerce. You can start taking payments now.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-					__( 'Once you have processed a payment, PayPal will review your application for final approval. Before you ship any goods make sure you have received a final approval for your Braintree account.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
-					__( 'Questions? We are a phone call away: 1-855-489-0345.', 'woocommerce-gateway-paypal-powered-by-braintree' )
-				) );
+				echo wc_help_tip( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					sprintf( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						'%s<br><br>%s<br><br>%s',
+						__( 'You just connected your Braintree account to WooCommerce. You can start taking payments now.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+						__( 'Once you have processed a payment, PayPal will review your application for final approval. Before you ship any goods make sure you have received a final approval for your Braintree account.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+						__( 'Questions? We are a phone call away: 1-855-489-0345.', 'woocommerce-gateway-paypal-powered-by-braintree' )
+					)
+				);
 
 				?>
 			</th>
@@ -724,6 +861,7 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 
 		$base_currency = get_woocommerce_currency();
 
+		/* translators: %s: currency code */
 		$button_text = sprintf( __( 'Add merchant account ID for %s', 'woocommerce-gateway-paypal-powered-by-braintree' ), $base_currency );
 
 		// currency selector
@@ -928,7 +1066,8 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 			$currency_code = strtolower( $currency_code );
 		}
 
-		$id    = sprintf( 'woocommerce_%s_merchant_account_id_%s', $this->get_id(), $currency_code );
+		$id = sprintf( 'woocommerce_%s_merchant_account_id_%s', $this->get_id(), $currency_code );
+		/* translators: %s: currency code */
 		$title = sprintf( __( 'Merchant Account ID (%s)', 'woocommerce-gateway-paypal-powered-by-braintree' ), $currency_display );
 
 		ob_start();
@@ -1637,8 +1776,158 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 	 * @return array associative array with members 'result' and 'redirect'
 	 */
 	public function process_payment( $order_id ) {
-		// Handle payment processing.
-		$result = parent::process_payment( $order_id );
+		/**
+		 * Direct Gateway Process Payment Filter.
+		 *
+		 * Allow actors to intercept and implement the process_payment() call for
+		 * this transaction. Return an array value from this filter will return it
+		 * directly to the checkout processing code and skip this method entirely.
+		 *
+		 * @since 3.2.0
+		 *
+		 * @param bool $result default true
+		 * @param int|string $order_id order ID for the payment
+		 * @param SV_WC_Payment_Gateway_Direct $this instance
+		 */
+		$result = apply_filters( 'wc_payment_gateway_' . $this->get_id() . '_process_payment', true, $order_id, $this );
+
+		if ( is_array( $result ) ) {
+			return $result;
+		}
+
+		// add payment information to order.
+		$order = $this->get_order( $order_id );
+
+		try {
+
+			// handle creating or updating a payment method for registered customers if tokenization is enabled.
+			if ( $this->supports_tokenization() && 0 !== (int) $order->get_user_id() ) {
+
+				// if already paying with an existing method, try and updated it locally and remotely.
+				if ( ! empty( $order->payment->token ) ) {
+
+					$this->update_transaction_payment_method( $order );
+
+					// otherwise, create a new token if desired.
+				} elseif ( $this->should_tokenize_before_sale( $order ) ) {
+
+					$order = $this->get_payment_tokens_handler()->create_token( $order );
+				}
+			}
+
+			// payment failures are handled internally by do_transaction()
+			// note that customer id & payment token are saved to order when create_token() is called.
+			if ( $this->should_skip_transaction( $order ) || $this->do_transaction( $order ) ) {
+
+				// This meta is used to prevent 3DS verification.
+				if ( $this->should_tokenize_apple_pay_card() ) {
+					$stored_tokens = \WC_Payment_Tokens::get_customer_tokens( get_current_user_id(), \WC_Braintree::CREDIT_CARD_GATEWAY_ID );
+
+					foreach ( $stored_tokens as $stored_token_id => $stored_token_object ) {
+						if ( $stored_token_object->get_token() === $order->payment->token ) {
+							$stored_token_object->add_meta_data( 'instrument_type', 'apple_pay' );
+							$stored_token_object->save();
+						}
+					}
+				}
+
+				// add transaction data for zero-dollar "orders".
+				if ( '0.00' === $order->payment_total ) {
+					$this->add_transaction_data( $order );
+				}
+
+				/**
+				 * Filters the order status that's considered to be "held".
+				 *
+				 * @since 3.2.0
+				 *
+				 * @param string $status held order status.
+				 * @param \WC_Order $order order object.
+				 * @param SV_WC_Payment_Gateway_API_Response|null $response API response object, if any.
+				 */
+				$held_order_status = apply_filters( 'wc_' . $this->get_id() . '_held_order_status', 'on-hold', $order, null );
+
+				if ( $order->has_status( $held_order_status ) ) {
+					// reduce stock for held orders, but don't complete payment (pass order ID so WooCommerce fetches fresh order object with reduced_stock meta set on order status change).
+					wc_reduce_stock_levels( $order->get_id() );
+				} else {
+					// mark order as having received payment.
+					$order->payment_complete();
+				}
+
+				// process_payment() can sometimes be called in an admin-context.
+				if ( isset( WC()->cart ) ) {
+					WC()->cart->empty_cart();
+				}
+
+				/**
+				 * Payment Gateway Payment Processed Action.
+				 *
+				 * Fired when a payment is processed for an order.
+				 *
+				 * @since 3.2.0
+				 *
+				 * @param \WC_Order $order order object.
+				 * @param SV_WC_Payment_Gateway_Direct $this instance.
+				 */
+				do_action( 'wc_payment_gateway_' . $this->get_id() . '_payment_processed', $order, $this );
+
+				$result = array(
+					'result'   => 'success',
+					'redirect' => $this->get_return_url( $order ),
+				);
+
+				$messages = array();
+
+				/*
+				 * Only get user messages if the session is available.
+				 *
+				 * The get_notices_as_user_messages() method makes use of the wc_get_notices()
+				 * function which assumes the presence of the WC session. This code may be called
+				 * in an admin context where the session is not available.
+				 *
+				 * See https://github.com/woocommerce/woocommerce/issues/48023
+				 * See https://github.com/woocommerce/woocommerce-gateway-paypal-powered-by-braintree/issues/614
+				 */
+				if ( isset( WC()->session ) ) {
+					$messages = $this->get_notices_as_user_messages();
+				}
+
+				if ( $this->debug_checkout() && $messages ) {
+					$result['message'] = ! empty( $messages ) ? implode( "\n", $messages ) : '';
+				}
+			} else {
+
+				$messages = array();
+
+				/*
+				 * Only get user messages if the session is available.
+				 *
+				 * The get_notices_as_user_messages() method makes use of the wc_get_notices()
+				 * function which assumes the presence of the WC session. This code may be called
+				 * in an admin context where the session is not available.
+				 *
+				 * See https://github.com/woocommerce/woocommerce/issues/48023
+				 * See https://github.com/woocommerce/woocommerce-gateway-paypal-powered-by-braintree/issues/614
+				 */
+				if ( isset( WC()->session ) ) {
+					$messages = $this->get_notices_as_user_messages();
+				}
+
+				$result = array(
+					'result'  => 'failure',
+					'message' => ! empty( $messages ) ? implode( "\n", $messages ) : __( 'The transaction failed.', 'woocommerce-gateway-paypal-powered-by-braintree' ),
+				);
+			}
+		} catch ( Framework\SV_WC_Plugin_Exception $exception ) {
+
+			$this->mark_order_as_failed( $order, $exception->getMessage() );
+
+			$result = array(
+				'result'  => 'failure',
+				'message' => $exception->getMessage(),
+			);
+		}
 
 		// If the payment failed, add the error messages to the result.
 		if ( 'failure' === $result['result'] && function_exists( 'wc_get_notices' ) ) {
@@ -1654,6 +1943,7 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 				}
 			}
 		}
+
 		return $result;
 	}
 
@@ -1672,5 +1962,36 @@ class WC_Gateway_Braintree extends Framework\SV_WC_Payment_Gateway_Direct {
 
 		// Add order note and continue with WC refund process.
 		$order->add_order_note( $order_note );
+	}
+
+	/**
+	 * Check if the gateway has an account connected.
+	 *
+	 * @since 3.2.6
+	 *
+	 * @return bool True if the gateway has an account connected, false otherwise.
+	 */
+	public function is_account_connected() {
+		return $this->is_configured();
+	}
+
+	/**
+	 * Returns true if the current gateway environment is configured to 'sandbox'
+	 *
+	 * @since 3.2.6
+	 *
+	 * @return boolean true if the current environment is test environment.
+	 */
+	public function is_in_test_mode() {
+		return $this->is_test_environment();
+	}
+
+	/**
+	 * Determine if the gateway still requires setup.
+	 *
+	 * @return bool
+	 */
+	public function needs_setup() {
+		return ! $this->is_configured();
 	}
 }

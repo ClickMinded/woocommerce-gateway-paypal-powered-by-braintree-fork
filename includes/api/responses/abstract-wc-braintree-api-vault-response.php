@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_12_0 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_7 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -45,7 +45,7 @@ abstract class WC_Braintree_API_Vault_Response extends WC_Braintree_API_Response
 	 */
 	protected function get_payment_token_data( $payment_method ) {
 
-		if ( 'Braintree\CreditCard' === get_class( $payment_method ) ) {
+		if ( 'Braintree\CreditCard' === get_class( $payment_method ) || 'Braintree\ApplePayCard' === get_class( $payment_method ) ) {
 
 			// credit card
 			return array(

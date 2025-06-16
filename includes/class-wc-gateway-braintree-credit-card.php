@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_12_0 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_7 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -262,6 +262,7 @@ class WC_Gateway_Braintree_Credit_Card extends WC_Gateway_Braintree {
 			'threed_secure_title' => array(
 				'title'       => esc_html__( '3D Secure', 'woocommerce-gateway-paypal-powered-by-braintree' ),
 				'type'        => 'title',
+				/* translators: Placeholders %1$s - opening HTML <a> link tag, closing HTML </a> link tag */
 				'description' => sprintf( esc_html__( '3D Secure benefits cardholders and merchants by providing an additional layer of verification using Verified by Visa, MasterCard SecureCode, and American Express SafeKey. %1$sLearn more about 3D Secure%2$s.', 'woocommerce-gateway-paypal-powered-by-braintree' ), '<a href="' . esc_url( $this->get_plugin()->get_documentation_url() ) . '#3d-secure' . '">', '</a>' ),
 			),
 			'threed_secure_mode' => array(

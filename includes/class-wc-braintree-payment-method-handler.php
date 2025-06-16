@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_12_0 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_7 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -126,4 +126,27 @@ class WC_Braintree_Payment_Method_Handler extends Framework\SV_WC_Payment_Gatewa
 		}
 	}
 
+	/**
+	 * Returns the Apple Pay card tokens for the current user.
+	 *
+	 * @since 3.2.0
+	 *
+	 * @return array
+	 */
+	public function get_apple_pay_card_tokens() {
+		if ( ! $this->get_gateway()->tokenization_enabled() ) {
+			return array();
+		}
+
+		$tokens        = array();
+		$stored_tokens = \WC_Payment_Tokens::get_customer_tokens( get_current_user_id(), \WC_Braintree::CREDIT_CARD_GATEWAY_ID );
+
+		foreach ( $stored_tokens as $token ) {
+			if ( 'apple_pay' === $token->get_meta( 'instrument_type', true ) ) {
+				$tokens[] = $token->get_token();
+			}
+		}
+
+		return $tokens;
+	}
 }

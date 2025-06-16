@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-use SkyVerge\WooCommerce\PluginFramework\v5_12_0 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_12_7 as Framework;
 
 defined( 'ABSPATH' ) or exit;
 
@@ -60,7 +60,7 @@ class WC_Braintree_API_Credit_Card_Transaction_Response extends WC_Braintree_API
 	 */
 	public function get_payment_token() {
 
-		if ( empty( $this->response->transaction->creditCardDetails->token ) ) {
+		if ( empty( $this->response->transaction->{$this->get_instrument_property()}->token ) ) {
 			throw new Framework\SV_WC_Payment_Gateway_Exception( esc_html__( 'Required credit card token is missing or empty!', 'woocommerce-gateway-paypal-powered-by-braintree' ) );
 		}
 
@@ -74,9 +74,23 @@ class WC_Braintree_API_Credit_Card_Transaction_Response extends WC_Braintree_API
 			'billing_address_id' => $this->get_billing_address_id(),
 		);
 
-		return new WC_Braintree_Payment_Method( $this->response->transaction->creditCardDetails->token, $data );
+		return new WC_Braintree_Payment_Method( $this->response->transaction->{$this->get_instrument_property()}->token, $data );
 	}
 
+	/**
+	 * Returns the property name for the payment instrument details.
+	 *
+	 * @return string
+	 */
+	public function get_instrument_property() {
+		$instrument_type = $this->response->transaction->paymentInstrumentType;
+
+		if ( 'apple_pay_card' === $instrument_type ) {
+			return 'applePayCardDetails';
+		}
+
+		return 'creditCardDetails';
+	}
 
 	/**
 	 * Get the card type used for this transaction
@@ -102,7 +116,7 @@ class WC_Braintree_API_Credit_Card_Transaction_Response extends WC_Braintree_API
 	 */
 	public function get_bin() {
 
-		return ! empty( $this->response->transaction->creditCardDetails->bin ) ? $this->response->transaction->creditCardDetails->bin : null;
+		return ! empty( $this->response->transaction->{$this->get_instrument_property()}->bin ) ? $this->response->transaction->{$this->get_instrument_property()}->bin : null;
 	}
 
 
@@ -117,7 +131,7 @@ class WC_Braintree_API_Credit_Card_Transaction_Response extends WC_Braintree_API
 	 */
 	public function get_masked_number() {
 
-		return ! empty( $this->response->transaction->creditCardDetails->maskedNumber ) ? $this->response->transaction->creditCardDetails->maskedNumber : null;
+		return ! empty( $this->response->transaction->{$this->get_instrument_property()}->maskedNumber ) ? $this->response->transaction->{$this->get_instrument_property()}->maskedNumber : null;
 	}
 
 
@@ -131,7 +145,7 @@ class WC_Braintree_API_Credit_Card_Transaction_Response extends WC_Braintree_API
 	 */
 	public function get_last_four() {
 
-		return ! empty( $this->response->transaction->creditCardDetails->last4) ? $this->response->transaction->creditCardDetails->last4 : null;
+		return ! empty( $this->response->transaction->{$this->get_instrument_property()}->last4 ) ? $this->response->transaction->{$this->get_instrument_property()}->last4 : null;
 	}
 
 
@@ -145,7 +159,7 @@ class WC_Braintree_API_Credit_Card_Transaction_Response extends WC_Braintree_API
 	 */
 	public function get_exp_month() {
 
-		return ! empty( $this->response->transaction->creditCardDetails->expirationMonth ) ? $this->response->transaction->creditCardDetails->expirationMonth : null;
+		return ! empty( $this->response->transaction->{$this->get_instrument_property()}->expirationMonth ) ? $this->response->transaction->{$this->get_instrument_property()}->expirationMonth : null;
 	}
 
 
@@ -159,7 +173,7 @@ class WC_Braintree_API_Credit_Card_Transaction_Response extends WC_Braintree_API
 	 */
 	public function get_exp_year() {
 
-		return ! empty( $this->response->transaction->creditCardDetails->expirationYear ) ? $this->response->transaction->creditCardDetails->expirationYear : null;
+		return ! empty( $this->response->transaction->{$this->get_instrument_property()}->expirationYear ) ? $this->response->transaction->{$this->get_instrument_property()}->expirationYear : null;
 	}
 
 
@@ -246,6 +260,4 @@ class WC_Braintree_API_Credit_Card_Transaction_Response extends WC_Braintree_API
 
 		return $this->has_3d_secure_info() && 'Y' === $this->response->transaction->threeDSecureInfo->enrolled;
 	}
-
-
 }
